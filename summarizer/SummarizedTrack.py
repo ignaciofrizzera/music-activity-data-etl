@@ -1,4 +1,5 @@
 from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
 from dotenv import load_dotenv
 import spotipy
@@ -172,11 +173,15 @@ class SummarizedTrack:
     
     def __init__(self, track_id: str):
         self.__spotify_client = self.__setup_client()
-        self.track_id = track_id
         self.data = {}
 
-        track_data = self.__spotify_client.track(track_id)
+        try:
+            track_data = self.__spotify_client.track(track_id)
+        except SpotifyException:
+            track_data = None
+        
         if track_data:
+            self.track_id = track_id
             audio_analysis = self.__spotify_client.audio_analysis(track_id)
             audio_features = self.__spotify_client.audio_features(track_id)
 
