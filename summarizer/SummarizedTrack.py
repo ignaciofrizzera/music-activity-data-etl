@@ -4,19 +4,9 @@ from dotenv import load_dotenv
 import spotipy
 import os
 
-load_dotenv()
 
 class SummarizedTrack:
     """Represents the summarized data 'needed' (i believe) to analyze a song."""
-
-    __client_id = os.getenv('CLIENT_ID')
-    __client_secret = os.getenv('CLIENT_SECRET')
-    __spotify_client = spotipy.Spotify(
-        client_credentials_manager=SpotifyClientCredentials(
-            client_id=__client_id,
-            client_secret=__client_secret
-        )
-    )
 
     @staticmethod
     def __get_track_data(
