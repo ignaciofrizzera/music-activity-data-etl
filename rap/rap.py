@@ -49,9 +49,29 @@ track_ids: List[Tuple[str, str]] = [
     ("0HFrCOmhCYXlv4NdEwRAuj", "1baooPNpHuiV81mVg5yjVO"),
     # The Spins. Mac Miller - Half Mast. Empire of the Sun
     ("51pshtuYkgUQnt5huMPbKL", "49Hkgl03InFFqBklOQxunt"),
+    # Stop Breathing. Playboi Carti - Hit. DaBaby, YoungBoy Never Broke Again
+    ("2lLG56qpLP3UbcLuzMvkWX", "4TfEcrA3VitAQ9ft91e5pQ"),
+    # 5% TINT. Travis Scott - Cell Therapy. Goodie Mob
+    ("11kDth1aKUEUMq9r1pqyds", "5wvxRlpUTSX9CE52yFZsIY"),
+    # Letter To My Daughter. NLE Choppa - Valuable Pain. YoungBoy Never Broke Again 
+    ("0WMBOtNqkWH6FUiXDNJ7kK", "61Oo3DUJubecZQosjho6Pp"),
+    # Having My Way. Lil Skies, Lil Durk - Nobody Safe. Trilla Venus
+    ("3TcKJZF01kCz0yyadk3gsI", "1Zg35klf7EnJvLN9SFXt8G"),
+    # LSD. Jaythenolife - Dook. Lil Droptop Golf Cart
+    ("6EmCPnzF3jqyXsOlF01G5y", "7MJW2vaxAFUKi9sDhR0XUf"),
     #
+    ("", ""),
     #
 ]
+
+"""
+    Notes.
+    Some features to add?:
+        - interpolation? if song1 or song2 interpolate each other
+        - sample? if song1 or song2 sample each other
+            ^ we can get this from the genius API i believe.
+        -
+"""
 
 def run_similar_rap_data():
     songs: List[Tuple[Dict, Dict]] = []
