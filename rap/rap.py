@@ -59,8 +59,8 @@ track_ids: List[Tuple[str, str]] = [
     ("3TcKJZF01kCz0yyadk3gsI", "1Zg35klf7EnJvLN9SFXt8G"),
     # LSD. Jaythenolife - Dook. Lil Droptop Golf Cart
     ("6EmCPnzF3jqyXsOlF01G5y", "7MJW2vaxAFUKi9sDhR0XUf"),
-    #
-    ("", ""),
+    # Hide It In My Sock. Lil Stitch - Magnolia. Playboi Carti
+    ("2LwjbcLehYt05GUbs7mDPM", "1e1JKLEDKP7hEQzJfNAgPl"),
     #
 ]
 
