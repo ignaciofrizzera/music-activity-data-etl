@@ -61,6 +61,8 @@ track_ids: List[Tuple[str, str]] = [
     ("6EmCPnzF3jqyXsOlF01G5y", "7MJW2vaxAFUKi9sDhR0XUf"),
     # Hide It In My Sock. Lil Stitch - Magnolia. Playboi Carti
     ("2LwjbcLehYt05GUbs7mDPM", "1e1JKLEDKP7hEQzJfNAgPl"),
+    # CS. Lil Uzi Vert - Chop Suey. System of a Down        -> cover
+    ("0ZpH1PMorID9D4cRCnxpPL", "2DlHlPMa4M17kufBvI2lEN"),
     #
 ]
 
