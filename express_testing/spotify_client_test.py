@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import spotipy
+import time as tm
 import os
 
-def __setup_client() -> spotipy.Spotify:
+def __setup_general_data_client() -> spotipy.Spotify:
     load_dotenv()
     return spotipy.Spotify(
         client_credentials_manager=SpotifyClientCredentials(
@@ -12,143 +13,43 @@ def __setup_client() -> spotipy.Spotify:
         )
     )
 
+def __setup_authorization_flow_client(scope: str) -> spotipy.Spotify:
+    load_dotenv()
+    return spotipy.Spotify(
+        auth_manager=SpotifyOAuth(
+            client_id=os.getenv('CLIENT_ID'),
+            client_secret=os.getenv('CLIENT_SECRET'),
+            redirect_uri=os.getenv('REDIRECT_URI'),
+            scope=scope
+        )
+    )
+
 # All available genres
-"""
-{
-   "genres":[
-      "acoustic",
-      "afrobeat",
-      "alt-rock",
-      "alternative",
-      "ambient",
-      "anime",
-      "black-metal",
-      "bluegrass",
-      "blues",
-      "bossanova",
-      "brazil",
-      "breakbeat",
-      "british",
-      "cantopop",
-      "chicago-house",
-      "children",
-      "chill",
-      "classical",
-      "club",
-      "comedy",
-      "country",
-      "dance",
-      "dancehall",
-      "death-metal",
-      "deep-house",
-      "detroit-techno",
-      "disco",
-      "disney",
-      "drum-and-bass",
-      "dub",
-      "dubstep",
-      "edm",
-      "electro",
-      "electronic",
-      "emo",
-      "folk",
-      "forro",
-      "french",
-      "funk",
-      "garage",
-      "german",
-      "gospel",
-      "goth",
-      "grindcore",
-      "groove",
-      "grunge",
-      "guitar",
-      "happy",
-      "hard-rock",
-      "hardcore",
-      "hardstyle",
-      "heavy-metal",
-      "hip-hop",
-      "holidays",
-      "honky-tonk",
-      "house",
-      "idm",
-      "indian",
-      "indie",
-      "indie-pop",
-      "industrial",
-      "iranian",
-      "j-dance",
-      "j-idol",
-      "j-pop",
-      "j-rock",
-      "jazz",
-      "k-pop",
-      "kids",
-      "latin",
-      "latino",
-      "malay",
-      "mandopop",
-      "metal",
-      "metal-misc",
-      "metalcore",
-      "minimal-techno",
-      "movies",
-      "mpb",
-      "new-age",
-      "new-release",
-      "opera",
-      "pagode",
-      "party",
-      "philippines-opm",
-      "piano",
-      "pop",
-      "pop-film",
-      "post-dubstep",
-      "power-pop",
-      "progressive-house",
-      "psych-rock",
-      "punk",
-      "punk-rock",
-      "r-n-b",
-      "rainy-day",
-      "reggae",
-      "reggaeton",
-      "road-trip",
-      "rock",
-      "rock-n-roll",
-      "rockabilly",
-      "romance",
-      "sad",
-      "salsa",
-      "samba",
-      "sertanejo",
-      "show-tunes",
-      "singer-songwriter",
-      "ska",
-      "sleep",
-      "songwriter",
-      "soul",
-      "soundtracks",
-      "spanish",
-      "study",
-      "summer",
-      "swedish",
-      "synth-pop",
-      "tango",
-      "techno",
-      "trance",
-      "trip-hop",
-      "turkish",
-      "work-out",
-      "world-music"
-   ]
-}
-"""
 
+def run_test_user_data():
+    scope = "user-read-recently-played"
+    client = __setup_authorization_flow_client(scope)
+    max_limit = 50
 
-def run_test():
-    client = __setup_client()
+    def calculate_unix_timestamp():
+        return int(tm.time())
+
+    recently_played_response = client.current_user_recently_played(
+        limit=max_limit, after=calculate_unix_timestamp())
+    # "cursors":{
+    #     "after":"1696449527808",
+    #     "before":"1696449527808"
+    # },
+    
+    # use this cursos to fetch the data for a whole day
+    for item in recently_played_response['items']:
+        track_name = item['track']['name']
+        artists_names = [artist_data['name'] for artist_data in item['track']['artists']]
+        all_artists = ', '.join(artists_names)
+        print(f"****** {track_name} - {all_artists}. Played at: {item['played_at']}")
+
+def run_test_seeds():
+    client = __setup_general_data_client()
 
     seed_tracks = ["6NMtzpDQBTOfJwMzgMX0zl", "2alpVcC9RxRWS1eSMGeAAP", "6ewQE1dNPv9qqlnB1CxrvM"]
     seed_artists = ["0Y5tJX1MQlPlqiwlOH1tJY", "6icQOAFXDZKsumw3YXyusw", "5INjqkS1o8h1imAzPqGZBb"]
@@ -175,5 +76,4 @@ def run_test():
         artists = []
         for artist in track['artists']:
             artists.append(artist['name'])
-        
         print(f"********** song: {track_name} - {', '.join(artists)}")
