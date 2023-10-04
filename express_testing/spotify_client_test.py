@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
+from datetime import datetime
 import spotipy
 import time as tm
 import os
@@ -24,8 +25,6 @@ def __setup_authorization_flow_client(scope: str) -> spotipy.Spotify:
         )
     )
 
-# All available genres
-
 def run_test_user_data():
     scope = "user-read-recently-played"
     client = __setup_authorization_flow_client(scope)
@@ -36,17 +35,29 @@ def run_test_user_data():
 
     recently_played_response = client.current_user_recently_played(
         limit=max_limit, after=calculate_unix_timestamp())
-    # "cursors":{
-    #     "after":"1696449527808",
-    #     "before":"1696449527808"
-    # },
     
-    # use this cursos to fetch the data for a whole day
-    for item in recently_played_response['items']:
-        track_name = item['track']['name']
-        artists_names = [artist_data['name'] for artist_data in item['track']['artists']]
-        all_artists = ', '.join(artists_names)
-        print(f"****** {track_name} - {all_artists}. Played at: {item['played_at']}")
+    songs_data = []
+    different_day = False
+
+    while not different_day:
+        for item in recently_played_response['items']:
+            track_name = item['track']['name']
+            artists_names = [artist_data['name'] for artist_data in item['track']['artists']]
+            all_artists = ', '.join(artists_names)
+            songs_data.append(
+                f"****** {track_name} - {all_artists}. Played at: {item['played_at']}")
+        
+        last_played_song_played_at = recently_played_response['items'][0]['played_at']
+        if datetime.fromisoformat(last_played_song_played_at).date() != datetime.now().date():
+            different_day = True
+        else:
+            recently_played_response = client.current_user_recently_played(
+                limit=max_limit, before=recently_played_response['cursors']['after']) # go backwards
+            if not recently_played_response['items']:
+                different_day = True
+
+    # for song in songs_data:
+    #     print(song)
 
 def run_test_seeds():
     client = __setup_general_data_client()
