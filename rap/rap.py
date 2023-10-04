@@ -2,6 +2,10 @@ from typing import List, Tuple, Dict
 from summarizer.SummarizedTrack import SummarizedTrack
 import json
 
+"""
+    hand-picked similar rap songs (according to me).
+"""
+
 track_ids: List[Tuple[str, str]] = [
     # Circus Maximus. Travis Scott - Black Skinhead. Kanye West
     ("4GL9GMX9t7Qkprvf1YighZ", "722tgOgdIbNe3BEyLnejw4"),
@@ -72,7 +76,6 @@ track_ids: List[Tuple[str, str]] = [
         - interpolation? if song1 or song2 interpolate each other
         - sample? if song1 or song2 sample each other
             ^ we can get this from the genius API i believe.
-        -
 """
 
 def run_similar_rap_data():
