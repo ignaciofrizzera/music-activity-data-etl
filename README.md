@@ -1,17 +1,11 @@
-# song-similarity
+# Music Activity Data ETL
 
-project that aims to make a model that decides if two songs are similar or not based on different song attributes such as:
-  - tempo
-  - timbre
-  - pitches
-  - etc
+## ETL to extract my daily music activity. Main goals of this project:
+- Practice and learn about data engineering tools such as Airflow and AWS services related to this field.
+- Monitor my music data (i really love music).
 
-also aiming to create datasets for some genres (rap, rock, dubstep) of similar known songs.
+## What data will I track
+This is yet to be defined, but the goal is to get the main song characteristics (**tempo**, **timbre**, **loudness**, **etc**) run some data transformations on it (**dimensional reduction on segments data mostly**) and use the Genius API to retrieve song lyrics and run **sentiment analysis** on them (a very basic one).
 
-
-still trying to figure out most of this, so work in progress :)
-
-# new idea (work in progress)
- - create 3-4 seeds with the /recommendations endpoint to get the "similar" songs, create a kind of ETL, so we automate the similar song hunting and don't do it by-hand
- - transform the data (mostly tempo, timbre and pitches) to make a more readable dataset
- - create a model with the songs i looked by hand? and use that model to see if the /recommendations seeded songs are similar or not (at the end of the day the model accuracy doesn't matter but the process of ETL + model to work with that data)
+## Pivoting
+The original idea of this project was to use the song characteristics I mentioned earlier, and by a hand-made dataset of similar songs, train a machine learning model that could decide if two songs sounded similar or not. This could be used in the future once this whole thing is working and I gather enough data, but I decided moving into simpler things (I believe) and go with this ETL idea.
