@@ -38,26 +38,27 @@ def run_test_user_data():
     
     songs_data = []
     different_day = False
-
-    while not different_day:
+    curr_date = datetime.now().date()
+    while not different_day and recently_played_response['items']:
         for item in recently_played_response['items']:
+            track_played_at = datetime.fromisoformat(item['played_at']).date()
+            if curr_date != track_played_at:
+                different_day = True
+                break
             track_name = item['track']['name']
+            track_id = item['track']['id']
             artists_names = [artist_data['name'] for artist_data in item['track']['artists']]
             all_artists = ', '.join(artists_names)
             songs_data.append(
-                f"****** {track_name} - {all_artists}. Played at: {item['played_at']}")
+                f"****** ({track_id}) {track_name} - {all_artists}. Played at: {item['played_at']}")
         
-        last_played_song_played_at = recently_played_response['items'][0]['played_at']
-        if datetime.fromisoformat(last_played_song_played_at).date() != datetime.now().date():
-            different_day = True
-        else:
+        if not different_day:
             recently_played_response = client.current_user_recently_played(
                 limit=max_limit, before=recently_played_response['cursors']['after']) # go backwards
-            if not recently_played_response['items']:
-                different_day = True
 
-    # for song in songs_data:
-    #     print(song)
+    for song in songs_data:
+        print(song)
+    print(f"total songs: {len(songs_data)}")
 
 def run_test_seeds():
     client = __setup_general_data_client()
