@@ -1,3 +1,6 @@
 """
     Transform
 """
+
+def transform():
+    pass

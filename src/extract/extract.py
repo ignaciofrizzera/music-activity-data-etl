@@ -5,3 +5,6 @@
         3) For each retrieved song, gather its lyrics from the Genius API.
         4) Dump the data in s3.
 """
+
+def extract():
+    pass

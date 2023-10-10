@@ -1,3 +1,6 @@
 """
     Load
 """
+
+def load():
+    pass
