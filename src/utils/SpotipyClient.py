@@ -25,6 +25,7 @@ class SpotipyClient:
                 client_id=os.getenv('CLIENT_ID'),
                 client_secret=os.getenv('CLIENT_SECRET'),
                 redirect_uri=os.getenv('REDIRECT_URI'),
-                scope=self.__default_scope if not scope else scope
+                scope=self.__default_scope if not scope else scope,
+                open_browser=False
             )
         )
