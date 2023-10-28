@@ -1,13 +1,13 @@
-from spotipy.oauth2 import SpotifyClientCredentials
+from src.utils.SpotipyClient import SpotipyClient
 from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
-from dotenv import load_dotenv
 import spotipy
 import os
 
-
 class SummarizedTrack:
     """Represents the summarized data 'needed' (i believe) to analyze a song."""
+
+    __spotify_client = SpotipyClient().general_data_client()
 
     @staticmethod
     def __get_track_data(
@@ -161,20 +161,10 @@ class SummarizedTrack:
         overall_data['features'] = features_data
         return overall_data
 
-    @staticmethod
-    def __setup_client() -> spotipy.Spotify:
-        load_dotenv()
-        return spotipy.Spotify(
-             client_credentials_manager=SpotifyClientCredentials(
-                client_id=os.getenv('CLIENT_ID'),
-                client_secret=os.getenv('CLIENT_SECRET')
-            )
-        )
-    
-    def __init__(self, track_id: str):
-        self.__spotify_client = self.__setup_client()
+    def __init__(self, song_data: Dict[str, str]):
         self.data = {}
 
+        track_id = song_data['track_id']        
         try:
             track_data = self.__spotify_client.track(track_id)
         except SpotifyException:
@@ -193,7 +183,8 @@ class SummarizedTrack:
 
             overall_data = self.__merge_overall_data(overall_data, features_data)
 
-            self.data['general_data'] = overall_data
+            song_data.update(overall_data)
+            self.data['general_data'] = song_data
             self.data['sections_data'] = sections_data
             self.data['segments_data'] = segments_data
     

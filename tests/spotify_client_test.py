@@ -28,6 +28,39 @@ def __setup_authorization_flow_client(scope: str) -> spotipy.Spotify:
     )
 
 
+def go_backwards():
+    
+    def print_songs(response):
+        for item in response['items']:
+            print(f"*** {item['track']['name']}, played at: {item['played_at']}")
+
+    
+    scope = "user-read-recently-played"
+    client = __setup_authorization_flow_client(scope)
+    max_limit = 50
+
+    def calculate_unix_timestamp():
+        return int(tm.time())
+
+    recently_played_response = client.current_user_recently_played(
+        limit=max_limit, after=calculate_unix_timestamp())
+    
+    print_songs(recently_played_response)
+
+    print('*****')
+
+    last_played_at = recently_played_response['items'][0]['played_at']
+    print(last_played_at)
+    date_time_obj = datetime.strptime(last_played_at, '%Y-%m-%dT%H:%M:%S.%fZ')
+    # Convert the datetime object to a Unix timestamp
+    unix_timestamp = date_time_obj.timestamp()
+    ts = int(unix_timestamp)
+    print(int(unix_timestamp))
+    recently_played_response = client.current_user_recently_played(
+        limit=max_limit, after=ts)
+    
+    print_songs(recently_played_response)
+
 def run_test_user_data():
     scope = "user-read-recently-played"
     client = __setup_authorization_flow_client(scope)

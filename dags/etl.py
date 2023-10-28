@@ -4,9 +4,10 @@ from src.transform.transform import transform
 from src.load.load import load
 import pendulum
 
+# airflow is a pain to run on windows :(
 @dag(
-    schedule=None,
-    start_date=pendulum.datetime(2023, 10, 10, tz="UTC"),
+    schedule="0 0 * * *", # probably will be every 1 hour
+    start_date=pendulum.datetime(2023, 10, 24, tz="UTC-3"),
 )
 def run_etl():
     """
