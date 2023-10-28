@@ -1,0 +1,8 @@
+{
+    "access_token": "dummy_token", 
+    "token_type": "Bearer", 
+    "expires_in": 3600, 
+    "scope": "user-read-recently-played", 
+    "expires_at": 1698528599, 
+    "refresh_token": "dummy_token"
+}
