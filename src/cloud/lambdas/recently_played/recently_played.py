@@ -62,7 +62,7 @@ def recently_played(event, context):
             item['track'], normalized_played_at))
 
     return {
-        'statusCode': 200,
+        'run_at': transform_to_timezone(str(datetime.now())).replace('-', '/').replace(' ', '-'),
         'data': json.dumps(songs)
     }
 
