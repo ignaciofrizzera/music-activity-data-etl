@@ -30,7 +30,7 @@
         "End": true,
         "Parameters": {
           "Bucket": "spotify-activity-data",
-          "Key.$": "States.Format('raw/{}.json', $$.State.EnteredTime)",
+          "Key.$": "States.Format('raw/{}.json', $run_at)",
           "Body.$": "States.StringToJson($.data)"
         },
         "Resource": "arn:aws:states:::aws-sdk:s3:putObject"
