@@ -1,0 +1,40 @@
+{
+    "Comment": "Gets recently played songs from spotify.",
+    "StartAt": "Get recently_played_songs",
+    "States": {
+      "Get recently_played_songs": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "OutputPath": "$.Payload",
+        "Parameters": {
+          "Payload.$": "$",
+          "FunctionName": "arn:aws:lambda:sa-east-1:825408647916:function:recently_played_songs:$LATEST"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ],
+            "IntervalSeconds": 1,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Dump recently_played data into /spotify/raw"
+      },
+      "Dump recently_played data into /spotify/raw": {
+        "Type": "Task",
+        "End": true,
+        "Parameters": {
+          "Bucket": "spotify-activity-data",
+          "Key.$": "States.Format('raw/{}.json', $$.State.EnteredTime)",
+          "Body.$": "States.StringToJson($.data)"
+        },
+        "Resource": "arn:aws:states:::aws-sdk:s3:putObject"
+      }
+    },
+    "TimeoutSeconds": 25
+}

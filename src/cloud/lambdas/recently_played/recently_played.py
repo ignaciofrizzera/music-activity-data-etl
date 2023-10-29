@@ -61,7 +61,10 @@ def recently_played(event, context):
         songs.get(song_date).append(get_basic_info_from_song(
             item['track'], normalized_played_at))
 
-    return json.dumps(songs)
+    return {
+        'statusCode': 200,
+        'data': json.dumps(songs)
+    }
 
 def lambda_handler(event, context):
     return recently_played(event, context)
