@@ -1,0 +1,21 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "CloudFormation template for EventBridge rule 'spotify-recently-played-rule'",
+    "Resources": {
+      "EventRule0": {
+        "Type": "AWS::Events::Rule",
+        "Properties": {
+          "Description": "Every hour triggers the step-function that gathers the spotify recently played data",
+          "EventBusName": "default",
+          "Name": "spotify-recently-played-rule",
+          "ScheduleExpression": "cron(0 0-23 * * ? *)",
+          "State": "ENABLED",
+          "Targets": [{
+            "Id": "Id01ba4e84-3a85-4ba7-bc68-41cf828a4a4c",
+            "Arn": "arn:aws:states:sa-east-1:825408647916:stateMachine:recently-played-songs-crawler",
+            "RoleArn": "arn:aws:iam::825408647916:role/service-role/Amazon_EventBridge_Invoke_Step_Functions-Spotify-Crawler"
+          }]
+        }
+      }
+    }
+  }
