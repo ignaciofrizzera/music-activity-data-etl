@@ -73,44 +73,6 @@ class SummarizedTrack:
         return clean_data
 
     @staticmethod
-    def __get_segments_data(
-        segments_response_data: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
-        """
-        Each segment contains a roughly conisistent sound throughout its duration.
-        * Segments data
-            - start
-            - duration
-            - loudness_start
-                The onset loudness of the segment in decibels (dB). 
-                Combined with loudness_max and loudness_max_time, 
-                these components can be used to describe the "attack" of the segment.
-            - loudness_max
-                The peak loudness of the segment in decibels (dB).
-            - loudness_end
-                The offset loudness of the segment in decibels (dB).
-            - pitches
-                Pitch content is given by a “chroma” vector, corresponding to the 12 pitch classes C, C#, D 
-                to B, with values ranging from 0 to 1 that describe the relative dominance of 
-                every pitch in the chromatic scale. 
-                For example a C Major chord would likely be represented by large values of C, E and G 
-                (i.e. classes 0, 4, and 7).
-            - timbre
-                Timbre is the quality of a musical note or sound that distinguishes different types of 
-                musical instruments, or voices. 
-        """
-        segment_keys_to_keep = [
-            'start', 'duration', 'loudness_start', 'loudness_max', 'loudness_end', 'pitches', 'timbre'
-        ]
-        clean_data = []
-        for segment in segments_response_data:
-            clean_segment_data = {}
-            for segment_key in segment_keys_to_keep:
-                clean_segment_data[segment_key] = segment[segment_key]
-            clean_data.append(clean_segment_data)
-        return clean_data
-
-    @staticmethod
     def __get_audio_features_data(
         audio_features_response_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
@@ -180,8 +142,6 @@ class SummarizedTrack:
 
             overall_data = self.__get_track_data(audio_analysis['track'])
             sections_data = self.__get_sections_data(audio_analysis['sections'])
-            segments_data = self.__get_segments_data(audio_analysis['segments'])
-            
             features_data = self.__get_audio_features_data(audio_features)
 
             overall_data = self.__merge_overall_data(overall_data, features_data)
@@ -189,13 +149,9 @@ class SummarizedTrack:
             song_data.update(overall_data)
             self.data['general_data'] = song_data
             self.data['sections_data'] = sections_data
-            self.data['segments_data'] = segments_data
     
     def get_general_data(self) -> Dict[str, Any]:
         return self.data['general_data']
 
     def get_sections_data(self) -> List[Dict[str, Any]]:
         return self.data['sections_data']
-
-    def get_segments_data(self) -> List[Dict[str, Any]]:
-        return self.data['segments_data']
