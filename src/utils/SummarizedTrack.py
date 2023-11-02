@@ -1,43 +1,83 @@
 from src.utils.SpotipyClient import SpotipyClient
 from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
-import spotipy
-import os
+
+"""
+Overall track information
+* Track data
+    - duration: 
+        Length of track in seconds.
+    - loudness:
+        The overall loudness of a track in decibels (dB). Loudness values are 
+        averaged across the entire track and are useful for comparing relative loudness of tracks. 
+        Loudness is the quality of a sound that is the primary psychological correlate 
+        of physical strength (amplitude). Values typically range between -60 and 0 db
+    - tempo: 
+        The overall estimated tempo of a track in beats per minute (BPM). 
+        In musical terminology, tempo is the speed or pace of a given piece and 
+        derives directly from the average beat duration
+    - key:
+        The estimated overall key of the section. The values in this field ranging from 0 to 11 
+        mapping to pitches using standard Pitch Class notation (E.g. 0 = C, 1 = C♯/D♭, 2 = D, 
+        and so on). If no key was detected, the value is -1
+    - time_signature: 
+        An estimated time signature. 
+        The time signature (meter) is a notational convention to specify how many beats are in 
+        each bar (or measure). 
+        The time signature ranges from 3 to 7 indicating time signatures of "3/4", to "7/4".
+    - mode: 
+        Mode indicates the modality (major or minor) of a track, 
+        the type of scale from which its melodic content is derived.
+        (major = 1, minor = 0)
+        
+* Audio features data
+    - acousticness
+        A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 
+        1.0 represents high confidence the track is acoustic.
+    - danceability
+        Danceability describes how suitable a track is for dancing based on a combination 
+        of musical elements including tempo, rhythm stability, beat strength, and overall regularity. 
+        A value of 0.0 is least danceable and 1.0 is most danceable.
+    - energy
+        Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and 
+        activity. Typically, energetic tracks feel fast, loud, and noisy. 
+        Perceptual features contributing to this attribute include dynamic range, 
+        perceived loudness, timbre, onset rate, and general entropy.
+    - instrumentalness
+        Predicts whether a track contains no vocals. "Ooh" and "aah" sounds are treated as 
+        instrumental in this context. Rap or spoken word tracks are clearly "vocal". 
+        The closer the instrumentalness value is to 1.0, the greater likelihood the track 
+        contains no vocal content.
+    - speechiness
+        Speechiness detects the presence of spoken words in a track. The more exclusively 
+        speech-like the recording (e.g. talk show, audio book, poetry), 
+        the closer to 1.0 the attribute value.
+    - valence
+        A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. 
+        Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), 
+        while tracks with low valence sound more negative (e.g. sad, depressed, angry)
+        
+Sections are defined by large variations in rhythm or timbre, e.g. chorus, verse, bridge, 
+guitar solo, etc. Each section contains its own descriptions of tempo, key, mode, 
+time_signature, and loudness.
+* Sections data
+    - start
+    - duration
+    - loudness
+    - tempo
+    - key
+    - mode
+    - time_signature
+"""
 
 class SummarizedTrack:
-    """Represents the summarized data 'needed' (i believe) to analyze a song."""
-
     __spotify_client = SpotipyClient().general_data_client()
-
+    
     @staticmethod
     def __get_track_data(
         track_response_data: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        Overall track information
-        * Track data
-            - duration: 
-                Length of track in seconds.
-            - loudness:
-                The overall loudness of a track in decibels (dB). Loudness values are 
-                averaged across the entire track and are useful for comparing relative loudness of tracks. 
-                Loudness is the quality of a sound that is the primary psychological correlate 
-                of physical strength (amplitude). Values typically range between -60 and 0 db
-            - tempo: 
-                The overall estimated tempo of a track in beats per minute (BPM). 
-                In musical terminology, tempo is the speed or pace of a given piece and 
-                derives directly from the average beat duration
-            - time_signature: 
-                An estimated time signature. 
-                The time signature (meter) is a notational convention to specify how many beats are in 
-                each bar (or measure). 
-                The time signature ranges from 3 to 7 indicating time signatures of "3/4", to "7/4".
-            - mode: 
-                Mode indicates the modality (major or minor) of a track, 
-                the type of scale from which its melodic content is derived.
-                (major = 1, minor = 0)
-        """
-        track_keys_to_keep = ['duration', 'loudness', 'tempo', 'time_signature', 'mode']
+        track_keys_to_keep = ['duration', 'loudness', 'tempo', 'key', 'time_signature', 'mode']
         clean_data = {}
         for track_key in track_keys_to_keep:
             clean_data[track_key] = track_response_data[track_key]
@@ -47,23 +87,8 @@ class SummarizedTrack:
     def __get_sections_data(
         sections_response_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
-        """
-        Sections are defined by large variations in rhythm or timbre, e.g. chorus, verse, bridge, 
-        guitar solo, etc. Each section contains its own descriptions of tempo, key, mode, 
-        time_signature, and loudness.
-        * Sections data
-            - start
-            - duration
-            - loudness
-            - tempo
-            - key:
-                The estimated overall key of the section. The values in this field ranging from 0 to 11 
-                mapping to pitches using standard Pitch Class notation (E.g. 0 = C, 1 = C♯/D♭, 2 = D, 
-                and so on). If no key was detected, the value is -1
-            - mode
-            - time_signature
-        """
-        section_keys_to_keep = ['start', 'duration', 'loudness', 'tempo', 'key', 'mode', 'time_signature']
+        section_keys_to_keep = [
+            'start', 'duration', 'loudness', 'tempo', 'key', 'mode', 'time_signature']
         clean_data = []
         for section in sections_response_data:
             clean_section_data = {}
