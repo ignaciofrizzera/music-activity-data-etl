@@ -1,71 +1,41 @@
-"""
-    Extract will have 4 steps:
-        1) Retrieve the songs listened in the whole day.
-        2) For each retrieved song, gather all the data related to it from the Spotify API.
-        3) For each retrieved song, gather its lyrics from the Genius API.
-        4) Dump the data in s3.
-"""
-
-from src.utils.SpotipyClient import SpotipyClient
-from src.utils.SummarizedTrack import SummarizedTrack
-from datetime import datetime, timedelta
-from typing import Dict
-import pytz
-import time as tm
+from src.cloud.s3.FileRepository import FileRepository
 
 def extract():
-    __timedelta = -3
-    __timezone = 'America/Argentina/Buenos_Aires'
+    file_repository = FileRepository()
+    raw_data = file_repository.get()
     
-    def get_daily_songs():
-        def transform_to_timezone(date: str) -> str:
-            argentina_time = datetime.fromisoformat(date) + timedelta(hours=__timedelta)
-            return argentina_time.strftime("%Y-%m-%d %H:%M")
-        
-        def calculate_unix_timestamp() -> int:
-            return int(tm.time())
-        
-        def get_basic_info_from_song(song_data: Dict, played_at: str) -> Dict[str, str]:
-            return {
-                'track_id': song_data['id'],
-                'track_name': song_data['name'],
-                'track_artist': ', '.join([artist_data['name'] for artist_data in song_data['artists']]),
-                'played_at': played_at
-            }
-        
-        client = SpotipyClient().authorization_flow_client()
-        max_limit = 50
-        recently_played_response = client.current_user_recently_played(
-            limit=max_limit, after=calculate_unix_timestamp())
-
-        songs_data = []
-        curr_date = datetime.now(pytz.timezone(__timezone)).date()
-
-        songs_by_day = [[curr_date, songs_data]]
-        
-        for item in recently_played_response['items']:
-            normalized_played_at = transform_to_timezone(item['played_at'])
-            song_date = datetime.fromisoformat(normalized_played_at).date()
-
-            if curr_date != datetime.fromisoformat(normalized_played_at).date():
-                print(f"Changing date from {curr_date} to {song_date}")
-                curr_date = song_date
-                songs_data = []
-                songs_by_day.append([curr_date, songs_data])
-            
-            summarized_audio_track = SummarizedTrack(
-                get_basic_info_from_song(item['track'], normalized_played_at))
-            songs_data.append(summarized_audio_track)
-
-        return songs_by_day
+    data_by_date = {} # <Date, list of songs played that day> (has repeated songs)
+    for report in raw_data:
+        for date, date_songs in report.items():
+            if not data_by_date.get(date):
+                data_by_date[date] = []
+            data_by_date[date].extend(date_songs)
+    
+    # There's a lot of repeated stuff in data_by_date.
+    # Since in 1 hour it's very hard to listen to more than 50 songs.
+    # e.g: 01:00 and 02:00 report will probably have the same data, or a lot of repeated songs.
+    data = {} # <Date, List of songs played that day> (non-repeated)
+    for date, total_date_songs in data_by_date.items():
+        non_repeated_data = {}
+        for song in total_date_songs:
+            song_key = (song['track_id'], song['played_at'])
+            non_repeated_data[song_key] = song
+        data[date] = list(non_repeated_data.values())
+    
+    for date, songs in data.items():
+        print(f"date: {date}, songs played: {len(songs)}, songs listing")
+        for song in songs:
+            print(f"******* {song}")
     
     """
-        Spotify will only give us the last 50 recently played, no matter what,
-        so using cursors, before/after, won't work, and we'll just stick to 50 songs.
+        next steps ->
+        * what to do with files and dates*
+            - we've the songs played by date in case of overlaps, since 00:00, 01:00, 02:00 
+            reports will probably overlap with date N and N-1
+            - so our final dict, data, will have at most 2 different dates
+            - lookout what to do with the files, in the transform step, do we give a dataframe for the
+              date? or a batch of songs. -> TODO: look into this, we only transform stuff once.
+        * scan songs data with our data dict we just made *
+        * see what we do with segments/sections data, since those won't be the same size
+            for each song -> this will be normalized, but in the transform step, not here.*
     """
-    songs = get_daily_songs()
-    
-    for whole_day_data in songs:
-        print(f"Songs for date: {whole_day_data[0]}")
-        for song in whole_day_data[1]:
-            print(song.get_general_data())
