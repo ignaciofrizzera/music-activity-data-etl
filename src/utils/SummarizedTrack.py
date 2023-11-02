@@ -161,6 +161,9 @@ class SummarizedTrack:
         overall_data['features'] = features_data
         return overall_data
 
+    def __str__(self) -> str:
+        return f"{self.data['general_data']}"
+    
     def __init__(self, song_data: Dict[str, str]):
         self.data = {}
 
