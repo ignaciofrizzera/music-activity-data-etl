@@ -6,8 +6,8 @@ import boto3
 import os
 
 
-# Raw file repository.
 class FileRepository:
+    """Raw files repository (hourly reports and unstructured data)"""
     
     def __init__(self):
         load_dotenv()
@@ -19,22 +19,29 @@ class FileRepository:
     def __build_path_from_now(self) -> str:
         # raw/2023/10/31/
         return self.__cloud_root_folder + datetime.now().strftime('%Y-%m-%d').replace('-', '/')
+    
+    def __get_daily_reports(self):
+        return self.__s3.list_objects(
+            Bucket=self.__bucket, Prefix=self.__build_path_from_now())
 
     def get(self) -> List[Dict[str, List[Dict[str, str]]]]:
         # raw/2023/10/31/01:00.json, 02:00.json, ...
         activity = []
-        prefix = self.__build_path_from_now()
-        day_content = self.__s3.list_objects(Bucket=self.__bucket, Prefix=prefix)
+        day_content = self.__get_daily_reports()
         for file in day_content['Contents']:
             activity.append(json.loads(self.__s3.get_object(
                 Bucket=self.__bucket, Key=file['Key'])['Body'].read().decode('utf-8')))
         return activity
 
-    # TODO: initially this FileRepository (maybe do one for raw, other for clean)
-    # shouldn't have a post, since the data is gathered from the step-function, there should
-    # be no reason whatsoever for this service to publish files/data.
-    # def post():
-    #     pass
-
-    def delete():
-        pass
+    def post_unstructured(self, data: str):
+        # raw/2023/10/31/report.json
+        key = f"{self.__build_path_from_now()}/report.json"
+        res = self.__s3.put_object(Bucket=self.__bucket, Key=key, Body=data)
+        if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+            self.__delete_hourly_reports(key)
+    
+    def __delete_hourly_reports(self, key: str):
+        day_content = self.__get_daily_reports()
+        for file in day_content['Contents']:
+            if file['Key'] != key:
+                self.__s3.delete_object(Bucket=self.__bucket, Key=file['Key'])
