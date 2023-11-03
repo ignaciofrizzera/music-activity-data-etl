@@ -1,5 +1,6 @@
 from src.cloud.s3.FileRepository import FileRepository
 from src.utils.SummarizedTrack import SummarizedTrack
+import json
 
 def extract():
     file_repository = FileRepository()
@@ -14,21 +15,10 @@ def extract():
                 songs_data[song_key] = song
     songs_data = list(songs_data.values())
 
-    summarized_tracks = []
-    for i, song in enumerate(songs_data):
-        #### testing 
-        summarized_track = SummarizedTrack(song)
-        summarized_tracks.append(summarized_track)
-        
-        x = summarized_track.get_sections_data()
-        print(summarized_track)
-        print(f"track sections: {len(x)}")
-        for section in x:
-            print(section)
-        print("**************************")
-        if i == 10: exit()
-        #### testing
-    
+    # Extract data for each song and post it.
+    summarized_tracks = [SummarizedTrack(song).get_data() for song in songs_data]
+    file_repository.post_unstructured(json.dumps(summarized_tracks))
+
     """
         We'll work with batches of data.
 
