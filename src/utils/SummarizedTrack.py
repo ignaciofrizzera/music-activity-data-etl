@@ -3,7 +3,8 @@ from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
 
 """
-Overall track information
+Some info about the data.
+
 * Track data
     - duration: 
         Length of track in seconds.
@@ -77,10 +78,25 @@ class SummarizedTrack:
     def __get_track_data(
         track_response_data: Dict[str, Any]
     ) -> Dict[str, Any]:
+        clean_data = {
+            'explicit': track_response_data['explicit'], 
+            'popularity': track_response_data['popularity']
+        }
+        clean_data['album'] = track_response_data['album']['name']
+        track_album_image = track_response_data['album']['images'][0]
+        clean_data['album_cover'] = track_album_image['url']
+        clean_data['album_cover_height'] = track_album_image['height']
+        clean_data['album_cover_width'] = track_album_image['width']
+        return clean_data
+
+    @staticmethod
+    def __get_track_audio_analysis_data(
+        track_audio_analysis_response_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         track_keys_to_keep = ['duration', 'loudness', 'tempo', 'key', 'time_signature', 'mode']
         clean_data = {}
         for track_key in track_keys_to_keep:
-            clean_data[track_key] = track_response_data[track_key]
+            clean_data[track_key] = track_audio_analysis_response_data[track_key]
         return clean_data
 
     @staticmethod
@@ -100,45 +116,15 @@ class SummarizedTrack:
     @staticmethod
     def __get_audio_features_data(
         audio_features_response_data: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
-        """
-            * Audio features data
-                - acousticness
-                    A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 
-                    1.0 represents high confidence the track is acoustic.
-                - danceability
-                    Danceability describes how suitable a track is for dancing based on a combination 
-                    of musical elements including tempo, rhythm stability, beat strength, and overall regularity. 
-                    A value of 0.0 is least danceable and 1.0 is most danceable.
-                - energy
-                    Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and 
-                    activity. Typically, energetic tracks feel fast, loud, and noisy. 
-                    Perceptual features contributing to this attribute include dynamic range, 
-                    perceived loudness, timbre, onset rate, and general entropy.
-                - instrumentalness
-                    Predicts whether a track contains no vocals. "Ooh" and "aah" sounds are treated as 
-                    instrumental in this context. Rap or spoken word tracks are clearly "vocal". 
-                    The closer the instrumentalness value is to 1.0, the greater likelihood the track 
-                    contains no vocal content.
-                - speechiness
-                    Speechiness detects the presence of spoken words in a track. The more exclusively 
-                    speech-like the recording (e.g. talk show, audio book, poetry), 
-                    the closer to 1.0 the attribute value.
-                - valence
-                    A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. 
-                    Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), 
-                    while tracks with low valence sound more negative (e.g. sad, depressed, angry)
-        """
+    ) -> Dict[str, Any]:
         audio_features_keys_to_keep = [
             'acousticness', 'danceability', 'energy', 'instrumentalness', 'speechiness', 'valence'
         ]
-        clean_data = []
+        clean_audio_feature_data = {}
         for audio_feature in audio_features_response_data:
-            clean_audio_feature_data = {}
             for audio_feature_key in audio_features_keys_to_keep:
                 clean_audio_feature_data[audio_feature_key] = audio_feature[audio_feature_key]
-            clean_data.append(clean_audio_feature_data)
-        return clean_data
+        return clean_audio_feature_data
 
     @staticmethod
     def __merge_overall_data(
@@ -162,16 +148,23 @@ class SummarizedTrack:
         
         if track_data:
             self.track_id = track_id
+
+            track_data = self.__get_track_data(track_data)
             audio_analysis = self.__spotify_client.audio_analysis(track_id)
             audio_features = self.__spotify_client.audio_features(track_id)
 
-            overall_data = self.__get_track_data(audio_analysis['track'])
+            overall_data = self.__get_track_audio_analysis_data(audio_analysis['track'])
+            
             sections_data = self.__get_sections_data(audio_analysis['sections'])
+            
             features_data = self.__get_audio_features_data(audio_features)
 
             overall_data = self.__merge_overall_data(overall_data, features_data)
 
+            # don't really like this update, but we re-use data from the crawler.
+            song_data.update(track_data)
             song_data.update(overall_data)
+
             self.data['general_data'] = song_data
             self.data['sections_data'] = sections_data
     
