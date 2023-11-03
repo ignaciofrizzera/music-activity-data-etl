@@ -168,6 +168,9 @@ class SummarizedTrack:
             self.data['general_data'] = song_data
             self.data['sections_data'] = sections_data
     
+    def get_data(self) -> Dict[str, Any]:
+        return self.data
+    
     def get_general_data(self) -> Dict[str, Any]:
         return self.data['general_data']
 
