@@ -4,7 +4,7 @@ import json
 
 def extract():
     file_repository = FileRepository()
-    raw_data = file_repository.get()
+    raw_data = file_repository.get_hourly()
     
     # Cleanup reports data, remove repeated songs from overlapped reports (e.g., 01:00, 02:00)
     songs_data = {}

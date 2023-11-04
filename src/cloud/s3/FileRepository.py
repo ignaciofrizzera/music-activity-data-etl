@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Any
 import json
 import boto3
 import os
@@ -24,7 +24,7 @@ class FileRepository:
         return self.__s3.list_objects(
             Bucket=self.__bucket, Prefix=self.__build_path_from_now())
 
-    def get(self) -> List[Dict[str, List[Dict[str, str]]]]:
+    def get_hourly(self) -> List[Dict[str, List[Dict[str, str]]]]:
         # raw/2023/10/31/01:00.json, 02:00.json, ...
         activity = []
         day_content = self.__get_daily_reports()
@@ -32,6 +32,11 @@ class FileRepository:
             activity.append(json.loads(self.__s3.get_object(
                 Bucket=self.__bucket, Key=file['Key'])['Body'].read().decode('utf-8')))
         return activity
+
+    def get_daily(self) -> List[Dict[str, Any]]:
+        key = f"{self.__build_path_from_now()}/report.json"
+        return json.loads(self.__s3.get_object(
+            Bucket=self.__bucket, Key=key)['Body'].read().decode('utf-8'))
 
     def post_unstructured(self, data: str):
         # raw/2023/10/31/report.json
