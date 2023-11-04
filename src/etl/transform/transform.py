@@ -152,21 +152,30 @@ def transform():
     
     def __analyze_sections(sections: List[Dict[str, Any]]) -> Dict[str, any]:
         total_sections = len(sections)
-        # Averages: "loudness", "tempo".
-        # Sequences: "key".
-        # TODO: time_signature, mode.
-        key_sequence = ''
+        
+        start_sequence = loudness_sequence = tempo_sequence = \
+                  key_sequence = mode_sequence = time_signature_sequence = ''
         duration_avg = loudness_avg = tempo_avg = 0
         for section in sections:
             duration_avg += section['duration']
             loudness_avg += section['loudness']
             tempo_avg += section['tempo']
+            start_sequence +=f"{str(section['start'])},"
+            loudness_sequence += f"{str(section['loudness'])},"
+            tempo_sequence += f"{str(section['tempo'])},"
             key_sequence += f"{str(section['key'])},"
+            mode_sequence += f"{str(section['mode'])},"
+            time_signature_sequence += f"{str(section['time_signature'])},"
         
         return {
             'sections': total_sections,
             'section_duration_avg': round(duration_avg / total_sections, 2),
+            'start_sequence': start_sequence[:-1],
+            'loudness_sequence': loudness_sequence[:-1],
+            'tempo_sequence': tempo_sequence[:-1],
             'key_sequence': key_sequence[:-1],
+            'mode_sequence': mode_sequence[:-1],
+            'time_signature': time_signature_sequence[:-1],
             'loudness_avg': round(loudness_avg / total_sections, 2),
             'tempo_avg': round(tempo_avg / total_sections, 2),
         }
