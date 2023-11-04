@@ -150,22 +150,29 @@ def transform():
             song['general_data'][feature_key] = song_features[feature_key]
         song['general_data'].pop('features')
     
-    def __calculate_avg(sections: List[Dict[str, Any]], key: str, total: int) -> float:
-        return round(sum(section[key] for section in sections) / total, 2)
-    
     def __analyze_sections(sections: List[Dict[str, Any]]) -> Dict[str, any]:
         total_sections = len(sections)
         # Averages: "loudness", "tempo".
-        # TODO: key, time_signature, mode.
+        # Sequences: "key".
+        # TODO: time_signature, mode.
+        key_sequence = ''
+        duration_avg = loudness_avg = tempo_avg = 0
+        for section in sections:
+            duration_avg += section['duration']
+            loudness_avg += section['loudness']
+            tempo_avg += section['tempo']
+            key_sequence += f"{str(section['key'])},"
+        
         return {
             'sections': total_sections,
-            'section_duration_avg': __calculate_avg(sections, 'duration', total_sections),
-            'loudness_avg': __calculate_avg(sections, 'loudness', total_sections),
-            'tempo_avg': __calculate_avg(sections, 'tempo', total_sections),
+            'section_duration_avg': round(duration_avg / total_sections, 2),
+            'key_sequence': key_sequence[:-1],
+            'loudness_avg': round(loudness_avg / total_sections, 2),
+            'tempo_avg': round(tempo_avg / total_sections, 2),
         }
 
     file_repository = FileRepository()
     data = file_repository.get_daily()
     for song in data:
         __unpack_features(song)
-        __analyze_sections(song['sections_data'])
+        new_sections_data = __analyze_sections(song['sections_data'])
