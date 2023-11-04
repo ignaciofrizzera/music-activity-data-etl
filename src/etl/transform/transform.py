@@ -1,5 +1,5 @@
 from src.cloud.s3.FileRepository import FileRepository
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 """
 {
@@ -150,14 +150,22 @@ def transform():
             song['general_data'][feature_key] = song_features[feature_key]
         song['general_data'].pop('features')
     
+    def __calculate_avg(sections: List[Dict[str, Any]], key: str, total: int) -> float:
+        return round(sum(section[key] for section in sections) / total, 2)
+    
+    def __analyze_sections(sections: List[Dict[str, Any]]) -> Dict[str, any]:
+        total_sections = len(sections)
+        # Averages: "loudness", "tempo".
+        # TODO: key, time_signature, mode.
+        return {
+            'sections': total_sections,
+            'section_duration_avg': __calculate_avg(sections, 'duration', total_sections),
+            'loudness_avg': __calculate_avg(sections, 'loudness', total_sections),
+            'tempo_avg': __calculate_avg(sections, 'tempo', total_sections),
+        }
+
     file_repository = FileRepository()
     data = file_repository.get_daily()
-    for index, song in enumerate(data):
-        # Unpack features
+    for song in data:
         __unpack_features(song)
-        # Work with sections data
-        print(song)
-        
-        print('**************')
-        if index == 5:
-            exit()
+        __analyze_sections(song['sections_data'])
