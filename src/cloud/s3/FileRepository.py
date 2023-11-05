@@ -41,10 +41,17 @@ class FileRepository:
     def post_unstructured(self, data: str):
         # raw/2023/10/31/report.json
         key = f"{self.__build_path_from_now()}/report.json"
-        res = self.__s3.put_object(Bucket=self.__bucket, Key=key, Body=data)
-        if res['ResponseMetadata']['HTTPStatusCode'] == 200:
-            self.__delete_hourly_reports(key)
+        self.__s3.put_object(Bucket=self.__bucket, Key=key, Body=data)
+        
+        # TODO: this should be done in the Load, once the whole cycle is done.
+        # if res['ResponseMetadata']['HTTPStatusCode'] == 200:
+        #     self.__delete_hourly_reports(key)
     
+    def post_structured(self, data: str):
+        # raw/2023/10/31/structured_report.json
+        key = f"{self.__build_path_from_now()}/structured_report.json"
+        self.__s3.put_object(Bucket=self.__bucket, Key=key, Body=data)
+
     def __delete_hourly_reports(self, key: str):
         day_content = self.__get_daily_reports()
         for file in day_content['Contents']:
