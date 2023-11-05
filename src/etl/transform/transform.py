@@ -1,4 +1,4 @@
-from src.cloud.s3.FileRepository import FileRepository
+from src.cloud.s3.RawFileRepository import RawFileRepository
 from typing import Dict, Any, List
 import json
 
@@ -53,7 +53,7 @@ def transform():
       song.update(__transform_sections(song['sections_data']))
       song.pop('sections_data')
 
-   file_repository = FileRepository()
+   file_repository = RawFileRepository()
    data = file_repository.get_daily()
    for song in data:
       __transform_song(song)
