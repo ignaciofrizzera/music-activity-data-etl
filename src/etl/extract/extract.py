@@ -2,6 +2,9 @@ from src.cloud.s3.FileRepository import FileRepository
 from src.utils.SummarizedTrack import SummarizedTrack
 import json
 
+# TODO: re-add segments data since we're representing sections/segments in sequences
+# later on, in Transform.
+
 def extract():
     file_repository = FileRepository()
     raw_data = file_repository.get_hourly()
