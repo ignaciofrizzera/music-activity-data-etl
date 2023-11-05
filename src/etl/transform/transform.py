@@ -16,7 +16,7 @@ def transform():
          song[general_data_key] = general_data[general_data_key]
       song.pop('general_data')
    
-   def __analyze_sections(sections: List[Dict[str, Any]]) -> Dict[str, Any]:
+   def __transform_sections(sections: List[Dict[str, Any]]) -> Dict[str, Any]:
       total_sections = len(sections)
         
       start_sequence = loudness_sequence = tempo_sequence = \
@@ -50,7 +50,7 @@ def transform():
    def __transform_song(song: Dict[str, Any]):
       __unpack_features(song)
       __unpack_general_data(song)
-      song.update(__analyze_sections(song['sections_data']))
+      song.update(__transform_sections(song['sections_data']))
       song.pop('sections_data')
 
    file_repository = FileRepository()
