@@ -6,7 +6,7 @@ import pandas as pd
 
 def load():
     raw_file_repository = RawFileRepository()
-    data =raw_file_repository.get(FileType.STRUCTURED)
+    data = raw_file_repository.get(FileType.STRUCTURED)
     clean_file_repository = CleanFileRepository()
     
     def __get_date_from_played_at(played_at: str) -> str:
@@ -28,3 +28,6 @@ def load():
             new_data = pd.concat([existing_df, new_data])
         new_data.drop_duplicates(['track_id', 'played_at'], inplace=True)
         clean_file_repository.post(date_key, new_data.to_csv(index=False))
+    
+    # Once we generate our daily cleaned data, we proceed to delete all the intermediate files.
+    raw_file_repository.delete()
