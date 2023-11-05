@@ -1,4 +1,5 @@
 from src.cloud.s3.RawFileRepository import RawFileRepository
+from src.cloud.s3.FileType import FileType
 from src.utils.SummarizedTrack import SummarizedTrack
 import json
 
@@ -7,7 +8,7 @@ import json
 
 def extract():
     file_repository = RawFileRepository()
-    raw_data = file_repository.get_hourly()
+    raw_data = file_repository.get(FileType.HOURLY)
     
     # Cleanup reports data, remove repeated songs from overlapped reports (e.g., 01:00, 02:00)
     songs_data = {}
@@ -20,4 +21,4 @@ def extract():
 
     # Extract data for each song and post it.
     summarized_tracks = [SummarizedTrack(song).get_data() for song in songs_data]
-    file_repository.post_unstructured(json.dumps(summarized_tracks))
+    file_repository.post(FileType.UNSTRUCTURED, json.dumps(summarized_tracks))

@@ -1,4 +1,5 @@
 from src.cloud.s3.RawFileRepository import RawFileRepository
+from src.cloud.s3.FileType import FileType
 from typing import Dict, Any, List
 import json
 
@@ -54,8 +55,8 @@ def transform():
       song.pop('sections_data')
 
    file_repository = RawFileRepository()
-   data = file_repository.get_daily()
+   data = file_repository.get(FileType.UNSTRUCTURED)
    for song in data:
       __transform_song(song)
    
-   file_repository.post_structured(json.dumps(data))
+   file_repository.post(FileType.STRUCTURED, json.dumps(data))
