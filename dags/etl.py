@@ -5,8 +5,9 @@ from airflow.decorators import dag, task
 import pendulum
 
 @dag(
-    schedule="0 0 * * *", # probably will be every 1 hour
-    start_date=pendulum.datetime(2023, 10, 24, tz="UTC-3"),
+    dag_id="daily_data_spotify",
+    schedule="30 23 * * *", # runs every day at 23:30 PM
+    start_date=pendulum.datetime(2023, 11, 13, tz="UTC-3"), # next week
 )
 def run_etl():
 
@@ -25,3 +26,5 @@ def run_etl():
     run_extract()
     run_transform()
     run_load()
+
+    run_extract > run_transform > run_load
