@@ -8,7 +8,7 @@
           "Description": "Every hour triggers the step-function that gathers the spotify recently played data",
           "EventBusName": "default",
           "Name": "spotify-recently-played-rule",
-          "ScheduleExpression": "cron(0 0-23 * * ? *)",
+          "ScheduleExpression": "cron(0 0/2 * * ? *)",
           "State": "ENABLED",
           "Targets": [{
             "Id": "Id01ba4e84-3a85-4ba7-bc68-41cf828a4a4c",
