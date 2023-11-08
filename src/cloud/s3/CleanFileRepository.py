@@ -9,8 +9,9 @@ class CleanFileRepository(FileRepository):
         super().__init__("clean/")
     
     def __build_path_from_date(self, date: str) -> str:
-        # clean/2023/11/04/2023-11-04.csv
-        return f"{self._cloud_root_folder}{date.replace('-', '/')}/{date}.csv"
+        # clean/2023/11/2023-11-04.json
+        year_month_path = '/'.join(date.split('-')[:2])
+        return f"{self._cloud_root_folder}{year_month_path}/{date}.json"
 
     def get(self, type: str) -> pd.DataFrame:
         try:
@@ -25,4 +26,5 @@ class CleanFileRepository(FileRepository):
         self._s3.put_object(Bucket=self._bucket, Key=key, Body=data)
 
     def delete(self, type: str = None):
+        # Why would I want to delete my structured data?
         pass

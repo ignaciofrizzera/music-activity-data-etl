@@ -27,7 +27,7 @@ def load():
         if not existing_df.empty:
             new_data = pd.concat([existing_df, new_data])
         new_data.drop_duplicates(['track_id', 'played_at'], inplace=True)
-        clean_file_repository.post(date_key, new_data.to_csv(index=False))
+        clean_file_repository.post(date_key, new_data.to_json(orient='records'))
     
     # Once we generate our daily cleaned data, we proceed to delete all the intermediate files.
     raw_file_repository.delete()
