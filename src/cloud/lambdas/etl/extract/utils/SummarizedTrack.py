@@ -1,4 +1,4 @@
-from SpotipyClient import SpotipyClient
+from utils.SpotipyClient import SpotipyClient
 from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
 
