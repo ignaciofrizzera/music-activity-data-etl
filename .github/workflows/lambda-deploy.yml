@@ -23,5 +23,5 @@ jobs:
             
             - name: 'Deploy Lambda test1'
               run: |
-                echo 'hello world'
-                pwd
+                zip -r lambda_test.zip /src/cloud/lambdas/test/
+                aws lambda update-function-code --function-name lambda_test --zip-file fileb://lambda_test.zip
