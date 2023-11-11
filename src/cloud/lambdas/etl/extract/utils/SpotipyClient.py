@@ -1,5 +1,4 @@
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
-from dotenv import load_dotenv
 import spotipy
 import os
 
@@ -7,15 +6,12 @@ class SpotipyClient:
     
     __default_scope = 'user-read-recently-played'
     
-    def __init__(self):
-        load_dotenv()
-
     @staticmethod
     def general_data_client() -> spotipy.Spotify:
         return spotipy.Spotify(
             client_credentials_manager=SpotifyClientCredentials(
-                client_id=os.getenv('CLIENT_ID'),
-                client_secret=os.getenv('CLIENT_SECRET')
+                client_id=os.environ.get('CLIENT_ID'),
+                client_secret=os.environ.get('CLIENT_SECRET')
             )
         )
 

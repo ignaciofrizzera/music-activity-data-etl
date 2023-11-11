@@ -1,6 +1,6 @@
 from src.cloud.s3.RawFileRepository import RawFileRepository
 from src.cloud.s3.FileType import FileType
-from src.cloud.lambdas.etl.utils.SummarizedTrack import SummarizedTrack
+from utils.SummarizedTrack import SummarizedTrack
 import json
 
 def extract():

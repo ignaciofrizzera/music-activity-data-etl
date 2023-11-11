@@ -1,4 +1,4 @@
-from src.cloud.lambdas.etl.utils.SpotipyClient import SpotipyClient
+from SpotipyClient import SpotipyClient
 from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
 
