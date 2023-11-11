@@ -4,6 +4,8 @@ from src.etl.load.load import load
 from airflow.decorators import dag, task
 import pendulum
 
+"""This will be left unused since the ETL is so simple I'll create a Step-Function to run it.
+"""
 @dag(
     dag_id="daily_data_spotify",
     schedule="30 23 * * *", # runs every day at 23:30 PM
