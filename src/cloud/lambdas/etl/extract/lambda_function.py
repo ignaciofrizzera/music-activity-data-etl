@@ -19,3 +19,6 @@ def extract():
     # Extract data for each song and post it.
     summarized_tracks = [SummarizedTrack(song).get_data() for song in songs_data]
     file_repository.post(FileType.UNSTRUCTURED, json.dumps(summarized_tracks))
+
+def event_handler(event, context):
+    return {'status': 200}
