@@ -21,4 +21,4 @@ def extract():
     file_repository.post(FileType.UNSTRUCTURED, json.dumps(summarized_tracks))
 
 def event_handler(event, context):
-    return {'status': 200}
+    return {'status': 200, 'event': event, 'context': context}
