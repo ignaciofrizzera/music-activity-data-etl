@@ -1,6 +1,6 @@
-from src.cloud.s3.RawFileRepository import RawFileRepository
-from src.cloud.s3.CleanFileRepository import CleanFileRepository
-from src.cloud.s3.FileType import FileType
+from s3.RawFileRepository import RawFileRepository
+from s3.CleanFileRepository import CleanFileRepository
+from s3.FileType import FileType
 import pandas as pd
 
 
@@ -31,3 +31,6 @@ def load():
     
     # Once we generate our daily cleaned data, we proceed to delete all the intermediate files.
     raw_file_repository.delete()
+
+def lambda_handler(event, context):
+    load()

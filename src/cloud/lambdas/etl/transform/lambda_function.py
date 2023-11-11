@@ -1,5 +1,5 @@
-from src.cloud.s3.RawFileRepository import RawFileRepository
-from src.cloud.s3.FileType import FileType
+from s3.RawFileRepository import RawFileRepository
+from s3.FileType import FileType
 from typing import Dict, Any, List
 import json
 
@@ -65,3 +65,6 @@ def transform():
       __transform_song(song)
    
    file_repository.post(FileType.STRUCTURED, json.dumps(data))
+
+def lambda_handler(event, context):
+   transform()

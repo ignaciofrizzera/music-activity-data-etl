@@ -20,5 +20,5 @@ def extract():
     summarized_tracks = [SummarizedTrack(song).get_data() for song in songs_data]
     file_repository.post(FileType.UNSTRUCTURED, json.dumps(summarized_tracks))
 
-def event_handler(event, context):
-    return {'status': 200, 'event': event, 'context': context}
+def lambda_handler(event, context):
+    extract()
