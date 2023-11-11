@@ -21,7 +21,7 @@ jobs:
                 aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
                 aws-region: 'sa-east-1'
             
-            - name: 'Deploy Lambda test1'
+            - name: 'Deploy Lambda Test'
               run: |
                 cd src/cloud/lambdas/test/
                 zip -r lambda_test.zip .
