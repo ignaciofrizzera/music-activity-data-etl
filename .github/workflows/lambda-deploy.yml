@@ -22,4 +22,6 @@ jobs:
                 aws-region: 'sa-east-1'
             
             - name: 'Deploy Lambda test1'
-              run: 'echo hello world'
+              run: |
+                'echo hello world'
+                'pwd'
