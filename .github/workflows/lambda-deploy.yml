@@ -23,5 +23,5 @@ jobs:
             
             - name: 'Deploy Lambda test1'
               run: |
-                'echo hello world'
-                'pwd'
+                echo 'hello world'
+                pwd
