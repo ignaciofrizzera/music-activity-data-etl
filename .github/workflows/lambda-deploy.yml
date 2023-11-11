@@ -31,7 +31,7 @@ jobs:
                 
             - name: 'Update Lambda: Extract'
               run: |
-                cp src/cloud/lambdas/etl/s3/* src/cloud/lambdas/etl/extract/ 
+                cp src/cloud/lambdas/etl/s3 src/cloud/lambdas/etl/extract/ 
                 cd src/cloud/lambdas/etl/extract
                 zip -r extract.zip .
                 aws lambda update-function-code --function-name spotify_etl_extract --zip-file fileb://extract.zip
