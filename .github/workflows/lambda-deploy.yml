@@ -21,7 +21,19 @@ jobs:
                 aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
                 aws-region: 'sa-east-1'
             
-            - name: 'Deploy Lambda Test'
+            - name: 'Deploy Lambda Extract' # This one is working.
+              run: |
+                cd src/cloud/lambdas/test/
+                zip -r lambda_test.zip .
+                aws lambda update-function-code --function-name lambda_test --zip-file fileb://lambda_test.zip
+            
+            - name: 'Deploy Lambda Transform'
+              run: |
+                cd src/cloud/lambdas/test/
+                zip -r lambda_test.zip .
+                aws lambda update-function-code --function-name lambda_test --zip-file fileb://lambda_test.zip
+            
+            - name: 'Deploy Lambda Load'
               run: |
                 cd src/cloud/lambdas/test/
                 zip -r lambda_test.zip .
