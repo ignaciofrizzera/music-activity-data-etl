@@ -14,9 +14,9 @@ def recently_played(event, context):
     def authorization_flow_client() -> spotipy.Spotify:
         return spotipy.Spotify(
             auth_manager=SpotifyOAuth(
-                client_id=os.environ.get('CLIENT_ID'), # Set in the Lambda's env.
-                client_secret=os.environ.get('CLIENT_SECRET'), # Set in the Lambda's env.
-                redirect_uri=os.environ.get('REDIRECT_URI'), # Set in the Lambda's env.
+                client_id=os.environ.get('CLIENT_ID'),
+                client_secret=os.environ.get('CLIENT_SECRET'),
+                redirect_uri=os.environ.get('REDIRECT_URI'),
                 scope=__scope,
                 open_browser=False
             )
