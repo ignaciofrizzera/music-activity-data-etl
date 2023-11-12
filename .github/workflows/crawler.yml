@@ -27,4 +27,5 @@ jobs:
                 cd src/cloud/lambdas/recently_played/
                 zip -r recently_played.zip .
                 aws lambda update-function-code --function-name recently_played_songs --zip-file fileb://recently_played.zip
+                aws lambda update-function-configuration --function-name recently_played_songs --environment "Variables={CLIENT_SECRET=${{ secrets.CLIENT_SECRET }},CLIENT_ID=${{ secrets.CLIENT_ID }},REDIRECT_URI=${{ secrets.REDIRECT_URI }}}"
 
