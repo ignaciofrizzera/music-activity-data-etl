@@ -28,6 +28,7 @@ jobs:
                 cd src/cloud/lambdas/etl/extract
                 zip -r extract.zip .
                 aws lambda update-function-code --function-name spotify_etl_extract --zip-file fileb://extract.zip
+                aws lambda update-function-configuration --function-name spotify_etl_extract --environment "Variables={CLIENT_SECRET=${{ secrets.CLIENT_SECRET }},CLIENT_ID=${{ secrets.CLIENT_ID }}}"
             
             - name: 'Update Lambda: Transform'
               run: |
@@ -35,6 +36,7 @@ jobs:
                 cd src/cloud/lambdas/etl/transform
                 zip -r transform.zip .
                 aws lambda update-function-code --function-name spotify_etl_transform --zip-file fileb://transform.zip
+                aws lambda update-function-configuration --function-name spotify_etl_transform --environment "Variables={CLIENT_SECRET=${{ secrets.CLIENT_SECRET }},CLIENT_ID=${{ secrets.CLIENT_ID }}}"
             
             - name: 'Update Lambda: Load'
               run: |
@@ -42,3 +44,4 @@ jobs:
                 cd src/cloud/lambdas/etl/load
                 zip -r load.zip .
                 aws lambda update-function-code --function-name spotify_etl_load --zip-file fileb://load.zip
+                aws lambda update-function-configuration --function-name spotify_etl_load --environment "Variables={CLIENT_SECRET=${{ secrets.CLIENT_SECRET }},CLIENT_ID=${{ secrets.CLIENT_ID }}}"
