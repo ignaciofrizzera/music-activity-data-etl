@@ -12,7 +12,9 @@ def recently_played(event, context):
     __timedelta = -3
     __scope = 'user-read-recently-played'
     __max_limit = 50
-    __cache = '.cache'
+    __cache_key = '.cache'
+    __cache_path = f'/tmp/{__cache_key}'
+    __cache_handler = CacheFileHandler(__cache_path)
     __bucket = 'spotipy-cache'
     
     def authorization_flow_client() -> spotipy.Spotify:
@@ -22,23 +24,24 @@ def recently_played(event, context):
                 client_secret=os.environ.get('CLIENT_SECRET'),
                 redirect_uri=os.environ.get('REDIRECT_URI'),
                 scope=__scope,
-                open_browser=False
+                open_browser=False,
+                cache_handler=__cache_handler
             )
         )
     
     def validate_token(auth: SpotifyOAuth):
-        if not os.path.exists(__cache):
+        if not os.path.exists(__cache_path):
             s3 = boto3.client('s3')
-            s3.download_file(Bucket=__bucket, Key=__cache, Filename=__cache)
+            s3.download_file(Bucket=__bucket, Key=__cache_key, Filename=__cache_path)
         
-        cached_token = CacheFileHandler(__cache).get_cached_token()
+        cached_token = __cache_handler.get_cached_token()
         if auth.is_token_expired(cached_token):
             auth.refresh_access_token(cached_token['refresh_token'])
-            with open(__cache, 'r') as token_file:
+            with open(__cache_path, 'r') as token_file:
                 # update s3 cached content
                 token = json.load(token_file)
                 s3 = boto3.client('s3')
-                s3.put_object(Bucket=__bucket, Key=__cache, Body=json.dumps(token))
+                s3.put_object(Bucket=__bucket, Key=__cache_key, Body=json.dumps(token))
     
     def transform_to_timezone(date: str) -> str:
         argentina_time = datetime.fromisoformat(date) + timedelta(hours=__timedelta)
