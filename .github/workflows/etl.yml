@@ -1,0 +1,45 @@
+name: Deploy ETL Lambda Functions
+
+on:
+    push:
+      branches:
+        - main
+        - ci/cd # for testing
+      paths:
+        - 'src/cloud/lambdas/etl/**'
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: 'Checkout repo'
+              uses: actions/checkout@v4
+
+            - name: 'Setup AWS Credentials'
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+                aws-region: 'sa-east-1'
+           
+            - name: 'Update Lambda: Extract'
+              run: |
+                cp -r src/cloud/lambdas/etl/s3 src/cloud/lambdas/etl/extract/
+                cd src/cloud/lambdas/etl/extract
+                zip -r extract.zip .
+                aws lambda update-function-code --function-name spotify_etl_extract --zip-file fileb://extract.zip
+            
+            - name: 'Update Lambda: Transform'
+              run: |
+                cp -r src/cloud/lambdas/etl/s3 src/cloud/lambdas/etl/transform/
+                cd src/cloud/lambdas/etl/transform
+                zip -r transform.zip .
+                aws lambda update-function-code --function-name spotify_etl_transform --zip-file fileb://transform.zip
+            
+            - name: 'Update Lambda: Load'
+              run: |
+                cp -r src/cloud/lambdas/etl/s3 src/cloud/lambdas/etl/load/
+                cd src/cloud/lambdas/etl/load
+                zip -r load.zip .
+                aws lambda update-function-code --function-name spotify_etl_load --zip-file fileb://load.zip

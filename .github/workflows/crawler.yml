@@ -1,0 +1,31 @@
+name: Deploy Spotify Crawler
+
+on:
+    push:
+      branches:
+        - main
+        - ci/cd # for testing
+      paths:
+        - 'src/cloud/lambdas/recently_played/**'
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: 'Checkout repo'
+              uses: actions/checkout@v4
+
+            - name: 'Setup AWS Credentials'
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+                aws-region: 'sa-east-1'
+            
+            - name: 'Update Lambda: recently_played'
+              run: |
+                cd src/cloud/lambdas/recently_played/
+                zip -r recently_played.zip .
+                aws lambda update-function-code --function-name recently_played_songs --zip-file fileb://recently_played.zip
+
