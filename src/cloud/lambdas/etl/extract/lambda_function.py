@@ -7,7 +7,8 @@ def extract():
     file_repository = RawFileRepository()
     raw_data = file_repository.get(FileType.HOURLY)
     
-    # Cleanup reports data, remove repeated songs from overlapped reports (e.g., 01:00, 02:00)
+    # Cleanup reports data, remove repeated songs from overlapped reports 
+    # (e.g., 01:00 and 02:00 reports probably share a lot of songs, since I'm sleeping at that time)
     songs_data = {}
     for report in raw_data:
         for _, songs in report.items(): # <Date, List of songs>
