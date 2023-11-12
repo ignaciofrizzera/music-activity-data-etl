@@ -1,15 +1,19 @@
 from datetime import timedelta, datetime
 from spotipy.oauth2 import SpotifyOAuth
+from spotipy.cache_handler import CacheFileHandler
 from typing import Dict, List
 import time as tm
 import spotipy
 import json
+import boto3
 import os
 
 def recently_played(event, context):
     __timedelta = -3
     __scope = 'user-read-recently-played'
     __max_limit = 50
+    __cache = '.cache'
+    __bucket = 'spotipy-cache'
     
     def authorization_flow_client() -> spotipy.Spotify:
         return spotipy.Spotify(
@@ -21,6 +25,20 @@ def recently_played(event, context):
                 open_browser=False
             )
         )
+    
+    def validate_token(auth: SpotifyOAuth):
+        if not os.path.exists(__cache):
+            s3 = boto3.client('s3')
+            s3.download_file(Bucket=__bucket, Key=__cache, Filename=__cache)
+        
+        cached_token = CacheFileHandler(__cache).get_cached_token()
+        if auth.is_token_expired(cached_token):
+            auth.refresh_access_token(cached_token['refresh_token'])
+            with open(__cache, 'r') as token_file:
+                # update s3 cached content
+                token = json.load(token_file)
+                s3 = boto3.client('s3')
+                s3.put_object(Bucket=__bucket, Key=__cache, Body=json.dumps(token))
     
     def transform_to_timezone(date: str) -> str:
         argentina_time = datetime.fromisoformat(date) + timedelta(hours=__timedelta)
@@ -38,11 +56,7 @@ def recently_played(event, context):
         }
     
     client = authorization_flow_client()
-    client_auth_manager: SpotifyOAuth = client.auth_manager
-    # Refresh token just in case.
-    if client_auth_manager.is_token_expired(client_auth_manager.get_cached_token()):
-        client_auth_manager.refresh_access_token(
-            client_auth_manager.get_cached_token()['refresh_token'])
+    validate_token(client.auth_manager)
     
     recently_played_response = client.current_user_recently_played(
         limit=__max_limit, after=calculate_unix_timestamp())
@@ -62,6 +76,7 @@ def recently_played(event, context):
         'run_at': transform_to_timezone(str(datetime.now())).replace('-', '/').replace(' ', '/'),
         'data': json.dumps(songs)
     }
+
 
 def lambda_handler(event, context):
     return recently_played(event, context)
