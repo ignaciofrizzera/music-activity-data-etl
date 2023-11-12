@@ -1,10 +1,9 @@
-name: Deploy Spotify Crawler
+name: Deploy Spotify Crawler Lambda Function
 
 on:
     push:
       branches:
         - main
-        - ci/cd # for testing
       paths:
         - 'src/cloud/lambdas/recently_played/**'
 
