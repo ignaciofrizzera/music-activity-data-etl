@@ -1,6 +1,3 @@
-""" Requires:
-    - spotipy 
-"""
 from datetime import timedelta, datetime
 from spotipy.oauth2 import SpotifyOAuth
 from typing import Dict, List
