@@ -29,7 +29,8 @@ def load():
         new_data.drop_duplicates(['track_id', 'played_at'], inplace=True)
         clean_file_repository.post(date_key, new_data.to_json(orient='records'))
     
-    # Once we generate our daily cleaned data, we proceed to delete all the intermediate files.
+    # Once we generate our daily cleaned data, we proceed to delete all the intermediate files:
+    # hourly reports, unstructured_report, structured_report.
     raw_file_repository.delete()
 
 def lambda_handler(event, context):
