@@ -1,0 +1,21 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation template for EventBridge rule 'spotify-etl-trigger-rule'",
+  "Resources": {
+    "EventRule0": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Triggers the Spotify's music activity ETL",
+        "EventBusName": "default",
+        "Name": "spotify-etl-trigger-rule",
+        "ScheduleExpression": "cron(30 2 ? * * *)",
+        "State": "ENABLED",
+        "Targets": [{
+          "Id": "Id4bb33461-bdfb-4729-af5c-69ab91cb6426",
+          "Arn": "arn:aws:states:sa-east-1:825408647916:stateMachine:spotify-music-activity-etl",
+          "RoleArn": "arn:aws:iam::825408647916:role/service-role/Amazon_EventBridge_Invoke_Step_Functions-Spotify-Crawler"
+        }]
+      }
+    }
+  }
+}
