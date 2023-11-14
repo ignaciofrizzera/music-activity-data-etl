@@ -13,7 +13,7 @@
         "Targets": [{
           "Id": "Id4bb33461-bdfb-4729-af5c-69ab91cb6426",
           "Arn": "arn:aws:states:sa-east-1:825408647916:stateMachine:spotify-music-activity-etl",
-          "RoleArn": "arn:aws:iam::825408647916:role/service-role/Amazon_EventBridge_Invoke_Step_Functions-Spotify-Crawler"
+          "RoleArn": "arn:aws:iam::825408647916:role/service-role/Amazon_EventBridge_Invoke_Step_Functions-SpotifyETL"
         }]
       }
     }
