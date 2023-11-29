@@ -66,5 +66,44 @@ Since a song can have many sections, instead of representing them in an array of
 - **mode_sequence**: Contains the mode of seach section.
 - **time_signature_sequence**: Contains the time signature of each section.
 
+### Here's how the data for a single song looks at the end of the ETL.
+
+```json
+{
+   "track_id":"7LSpFCvRZZot2AlmkUzy9k",
+   "track_name":"SIRENS",
+   "track_artist":"Travis Scott",
+   "played_at":"2023-11-28 11:40",
+   "explicit":true,
+   "popularity":77,
+   "album":"UTOPIA",
+   "album_cover":"https:\/\/i.scdn.co\/image\/ab67616d0000b273881d8d8378cd01099babcd44",
+   "album_cover_height":640,
+   "album_cover_width":640,
+   "duration":204.4473,
+   "loudness":-6.117,
+   "tempo":96.003,
+   "key":9,
+   "time_signature":3,
+   "mode":0,
+   "acousticness":0.0976,
+   "danceability":0.588,
+   "energy":0.88,
+   "instrumentalness":0.000167,
+   "speechiness":0.0747,
+   "valence":0.242,
+   "sections":9,
+   "section_duration_avg":22.72,
+   "loudness_avg":-7.21,
+   "tempo_avg":95.66,
+   "start_sequence":[0.0,25.8771,61.58935,78.49172,94.13155,142.6858,153.51543,169.3769,185.09818],
+   "loudness_sequence":[-16.568,-6.653,-5.532,-5.096,-5.193,-4.658,-2.569,-7.718,-10.89],
+   "tempo_sequence":[96.819,96.11,95.934,95.919,96.05,93.908,94.623,96.033,95.551],
+   "key_sequence":[9,9,0,8,9,9,9,2,7],
+   "mode_sequence":[0,0,1,1,0,0,0,1,0],
+   "time_signature_sequence":[3,3,3,3,3,3,3,3,3]
+}
+```
+
 ## Pivoting
 The original idea of this project was to use the song characteristics I mentioned earlier, and by a hand-made dataset of similar songs, train a machine learning model that could decide if two songs sounded similar or not. This could be used in the future once this whole thing is working and I gather enough data, but I decided moving into simpler things (I believe) and go with this ETL idea.
