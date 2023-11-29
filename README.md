@@ -121,7 +121,7 @@ The visualization is not done yet. I'm planning on showcasing it on my personal 
 ## What I Learned
 - Got a lot more familiar with the whole AWS ecosystem.
 - Learned about CI/CD (Github Actions workflows).
-- Integrated my CI/CD to my AWS resources (Lambda Functions), which was pretty cool and simple.
+- Integrated my CI/CD to my AWS resources (Lambda Functions), which was pretty cool and simple. Even though this was a huge leap in my Lambdas knowledge, I want to improve the way I work with Layers. In this project, I manually created my Layers and updated them from the AWS web interface. I'd like to automate this or at least do it from code or CI/CD, just as I do with my Lambdas.
 - Discovered the Step-Functions service, which I found very interesting and powerful. I'd like to dig deeper in how to create and deploy them as code instead of doing it by hand with the web interface (similar to what I did with my Lambdas and my CI/CD).
 
 ## Original Idea
