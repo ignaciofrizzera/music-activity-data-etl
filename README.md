@@ -104,6 +104,9 @@ Since a song can have many sections, instead of representing them in an array of
    "time_signature_sequence":[3,3,3,3,3,3,3,3,3]
 }
 ```
+## Data that could be added
+- The **genre** of the song is a feature that is very useful and I'm actually not getting from the tracks.
+- The **segments** of the track. Just like Sections, tracks are divided in Segments. According to Spotify: *Each segment contains a roughly conisistent sound throughout its duration.*
 
 ## Visualization
 The visualization is not done yet. I'm planning on showcasing it on my personal website, which is in development right now. 
