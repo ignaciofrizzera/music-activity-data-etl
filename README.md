@@ -127,4 +127,4 @@ The visualization is not done yet. I'm planning on showcasing it on my personal 
 ## Original Idea
 The original idea of this project was to use the song characteristics I mentioned earlier, and by a hand-made dataset of similar songs, train a machine learning model that could decide if two songs sounded similar or not.
 
-This could be done as a side-project in the future, since I'll have a very interesting dataset as this ETL keeps on running.
+This could be done as a side-project in the future, since I'll have a very interesting and diversified dataset as this ETL keeps on running.
