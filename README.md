@@ -66,7 +66,7 @@ Since a song can have many sections, instead of representing them in an array of
 - **mode_sequence**: Contains the mode of seach section.
 - **time_signature_sequence**: Contains the time signature of each section.
 
-### Here's how the data for a single song looks at the end of the ETL.
+### Here's how the data for a single song looks at the end of the ETL
 
 ```json
 {
