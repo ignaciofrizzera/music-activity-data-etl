@@ -40,7 +40,7 @@ The following data comes from the [Track's Audio Features](https://developer.spo
 -  **tempo**: Overall tempo of the track in beats per minute.
 -  **key**: The key the track is in.
 -  **time_signature**: Estimated time signature.
--  **mode**: The mode indicates the modality of the track (mayor or minor).
+-  **mode**: The mode indicates the modality of the track (major or minor).
 -  **acousticness**: Confidence value of wether the track is acoustic.
 -  **danceability**: Describes how suitable the track is for dancing.
 -  **energy**: Represents a perceptual measure of intensity and activity.
