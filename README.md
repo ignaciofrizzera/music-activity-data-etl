@@ -118,5 +118,11 @@ The visualization is not done yet. I'm planning on showcasing it on my personal 
 
 **Future Possibilities**: The dataset created from this ETL offers extensive potential for additional visualizations and analyses. However, the current focus is on the features just described.
 
+## What I Learned
+- Got a lot more familiar with the whole AWS ecosystem.
+- Learned about CI/CD (Github Actions workflows).
+- Integrated my CI/CD to my AWS resources (Lambda Functions), which was pretty cool and simple.
+- Discovered the Step-Functions service, which I found very interesting and powerful. I'd like to dig deeper in how to create and deploy them as code instead of doing it by hand with the web interface (similar to what I did with my Lambdas and my CI/CD).
+
 ## Pivoting
 The original idea of this project was to use the song characteristics I mentioned earlier, and by a hand-made dataset of similar songs, train a machine learning model that could decide if two songs sounded similar or not. This could be used in the future once this whole thing is working and I gather enough data, but I decided moving into simpler things (I believe) and go with this ETL idea.
