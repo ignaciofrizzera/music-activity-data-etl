@@ -105,5 +105,15 @@ Since a song can have many sections, instead of representing them in an array of
 }
 ```
 
+## Visualization
+The visualization is not done yet. I'm planning on showcasing it on my personal website, which is in development right now. 
+
+**Planned Features**:
+
+- **Daily Music Insights**: A unique calendar view, where each day is represented by the album cover of my most-listened-to song of that day.
+- **Annual Listening Summary**: A compilation of my total listening time over the year.
+
+**Future Possibilities**: The dataset created from this ETL offers extensive potential for additional visualizations and analyses. However, the current focus is on the features just described.
+
 ## Pivoting
 The original idea of this project was to use the song characteristics I mentioned earlier, and by a hand-made dataset of similar songs, train a machine learning model that could decide if two songs sounded similar or not. This could be used in the future once this whole thing is working and I gather enough data, but I decided moving into simpler things (I believe) and go with this ETL idea.
