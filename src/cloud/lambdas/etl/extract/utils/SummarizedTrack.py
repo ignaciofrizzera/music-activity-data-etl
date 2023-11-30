@@ -1,6 +1,6 @@
-from utils.SpotipyClient import SpotipyClient
 from spotipy.exceptions import SpotifyException
 from typing import Dict, List, Any
+import spotipy
 
 """
 Some info about the data.
@@ -72,7 +72,6 @@ time_signature, and loudness.
 """
 
 class SummarizedTrack:
-    __spotify_client = SpotipyClient().general_data_client()
     
     @staticmethod
     def __get_track_data(
@@ -137,8 +136,13 @@ class SummarizedTrack:
     def __str__(self) -> str:
         return f"{self.data['general_data']}"
     
-    def __init__(self, song_data: Dict[str, str]):
+    def __init__(
+        self, 
+        spotify_client: spotipy.Spotify,
+        song_data: Dict[str, str]
+    ):
         self.data = {}
+        self.__spotify_client = spotify_client
 
         track_id = song_data['track_id']        
         try:

@@ -1,6 +1,7 @@
 from s3.RawFileRepository import RawFileRepository
 from s3.FileType import FileType
 from utils.SummarizedTrack import SummarizedTrack
+from utils.SpotipyClient import SpotipyClient
 import json
 
 def extract():
@@ -18,7 +19,10 @@ def extract():
     songs_data = list(songs_data.values())
 
     # Extract data for each song and post it.
-    summarized_tracks = [SummarizedTrack(song).get_data() for song in songs_data]
+    client = SpotipyClient().general_data_client()
+    summarized_tracks = [
+        SummarizedTrack(client, song).get_data() for song in songs_data
+    ]
     file_repository.post(FileType.UNSTRUCTURED, json.dumps(summarized_tracks))
 
 def lambda_handler(event, context):
