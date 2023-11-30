@@ -12,7 +12,7 @@ Reading about AWS services, I came across AWS: Step Functions.
 
 Since the Spotify endpoint as it is doesn't really do what I want (get all my played songs), I decided to do two things:
 - Setup an AWS: Step Function to trigger a Lambda function every 1 hour in order to get all my played songs and periodically dump them in a S3 bucket.
-- Since my ETL is simple, I decided to make another Step Function to run it, composed of 3 Lambdas, one for each main function, **Extract**, **Transform** and **Load**. This Step Function runs daily.
+- Since my ETL process is very simple, I created another Step Function to run it, consisting of three Lambdas for each principal function: **Extract**, **Transform**, and **Load**. It executes three times daily: initially at 9:30 AM, then at 5:30 PM, and lastly at 11:30 PM (UTC-3). Initially, it ran only once, but to diminish the volume of high API requests within a short period, I increased the frequency at which it runs.
 
 So my project architecture looks like this:
 
