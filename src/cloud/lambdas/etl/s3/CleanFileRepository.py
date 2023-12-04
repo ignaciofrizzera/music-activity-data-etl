@@ -1,7 +1,7 @@
 from s3.FileRepository import FileRepository
 from botocore.exceptions import ClientError
-from io import StringIO
 import pandas as pd
+import json
 
 class CleanFileRepository(FileRepository):
 
@@ -17,7 +17,7 @@ class CleanFileRepository(FileRepository):
         try:
             key = self.__build_path_from_date(type)
             data = self._s3.get_object(Bucket=self._bucket, Key=key)['Body'].read().decode('utf-8')
-            return pd.read_csv(StringIO(data))
+            return pd.DataFrame(json.loads(data))
         except ClientError:
             return pd.DataFrame()
 
