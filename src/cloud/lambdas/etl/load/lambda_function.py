@@ -15,7 +15,13 @@ def load():
     
     def __is_subset(small_df: pd.DataFrame, big_df: pd.DataFrame, ) -> bool:
         # checks if the small_df is a subset of the big_df
-        return len(pd.merge(small_df, big_df)) == len(small_df)
+        subset_cols = ['track_id', 'played_at']
+        
+        # pick a subset, since this dfs have columns with lists values which aren't hashable
+        small_df_s = small_df[subset_cols]
+        big_df_s = big_df[subset_cols]
+
+        return len(small_df_s.merge(big_df_s, how='inner')) == len(small_df_s)
     
     def __drop_and_post(data: pd.DataFrame, date_key) -> None:
         data.drop_duplicates(['track_id', 'played_at'], inplace=True)
