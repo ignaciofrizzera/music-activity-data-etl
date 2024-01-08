@@ -15,7 +15,7 @@ def load():
     
     def __is_subset(small_df: pd.DataFrame, big_df: pd.DataFrame, ) -> bool:
         # checks if the small_df is a subset of the big_df
-        return len(small_df.merge(big_df, how='inner')) == len(small_df)
+        return len(pd.merge(small_df, big_df)) == len(small_df)
     
     def __drop_and_post(data: pd.DataFrame, date_key) -> None:
         data.drop_duplicates(['track_id', 'played_at'], inplace=True)
