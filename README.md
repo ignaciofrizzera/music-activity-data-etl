@@ -107,16 +107,13 @@ Since a song can have many sections, instead of representing them in an array of
 ## Data that could be added
 - The **genre** of the song is a feature that is very useful and I'm actually not getting from the tracks.
 - The **segments** of the track. Just like Sections, tracks are divided in Segments. According to Spotify: *Each segment contains a roughly conisistent sound throughout its duration.*
+  
+  **Segments** are really interesting because they have the *pitches* property, which can be used along the [Scriabin's sound-to-color circle of fifths](https://en.wikipedia.org/wiki/Chromesthesia#:~:text=Scriabin's%20sound%2Dto%2Dcolor%20circle%20of%20fifths&text=He%20created%20a%20system%20that,sensation%20of%20touch%20and%20taste%22.) to represent a song as a series of colors and generate cool images with them.
 
 ## Visualization
-The visualization is not done yet. I'm planning on showcasing it on my personal website, which is in development right now. 
+You can view a basic visualization of this ETL in my [personal web page](https://www.ignaciofrizzera.com/projects/spotify-etl).
 
-**Planned Features**:
-
-- **Daily Music Insights**: A unique calendar view, where each day is represented by the album cover of my most-listened-to song of that day.
-- **Annual Listening Summary**: A compilation of my total listening time over the year.
-
-**Future Possibilities**: The dataset created from this ETL offers extensive potential for additional visualizations and analyses. However, the current focus is on the features just described.
+**Future Possibilities**: The dataset created from this ETL offers extensive potential for endless visualizations and analyses.
 
 ## What I Learned
 - Got a lot more familiar with the whole AWS ecosystem.
