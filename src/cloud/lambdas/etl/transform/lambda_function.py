@@ -39,12 +39,20 @@ def transform():
          key_sequence.append(section['key'])
          mode_sequence.append(section['mode'])
          time_signature_sequence.append(section['time_signature'])
-        
+
+      # Apparenly some songs can have 0 sections? (short interludes from albums?)
+      if sections <= 0:
+         section_duration_avg = loudness_avg = tempo_avg = 0
+      else:
+         section_duration_avg = round(duration_avg / total_sections, 2)
+         loudness_avg =  round(loudness_avg / total_sections, 2)
+         tempo_avg = round(tempo_avg / total_sections, 2)         
+
       return {
          'sections': total_sections,
-         'section_duration_avg': round(duration_avg / total_sections, 2),
-         'loudness_avg': round(loudness_avg / total_sections, 2),
-         'tempo_avg': round(tempo_avg / total_sections, 2),
+         'section_duration_avg': section_duration_avg,
+         'loudness_avg': loudness_avg,
+         'tempo_avg': tempo_avg,
          'start_sequence': start_sequence,
          'loudness_sequence': loudness_sequence,
          'tempo_sequence': tempo_sequence,
