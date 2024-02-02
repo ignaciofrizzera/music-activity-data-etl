@@ -19,35 +19,30 @@ def transform():
    
    def __transform_sections(sections: List[Dict[str, Any]]) -> Dict[str, Any]:
       total_sections = len(sections)
-        
       start_sequence = []
       loudness_sequence = []
       tempo_sequence = []
       key_sequence = []
       mode_sequence = []
       time_signature_sequence = []
-
       duration_avg = loudness_avg = tempo_avg = 0
-
-      for section in sections:
-         duration_avg += section['duration']
-         loudness_avg += section['loudness']
-         tempo_avg += section['tempo']
-         start_sequence.append(section['start'])
-         loudness_sequence.append(section['loudness'])
-         tempo_sequence.append(section['tempo'])
-         key_sequence.append(section['key'])
-         mode_sequence.append(section['mode'])
-         time_signature_sequence.append(section['time_signature'])
-
-      # Apparenly some songs can have 0 sections? (short interludes from albums?)
-      if sections <= 0:
-         section_duration_avg = loudness_avg = tempo_avg = 0
-      else:
+      
+      if sections:
+         for section in sections:
+            duration_avg += section['duration']
+            loudness_avg += section['loudness']
+            tempo_avg += section['tempo']
+            start_sequence.append(section['start'])
+            loudness_sequence.append(section['loudness'])
+            tempo_sequence.append(section['tempo'])
+            key_sequence.append(section['key'])
+            mode_sequence.append(section['mode'])
+            time_signature_sequence.append(section['time_signature'])
+         
          section_duration_avg = round(duration_avg / total_sections, 2)
          loudness_avg =  round(loudness_avg / total_sections, 2)
-         tempo_avg = round(tempo_avg / total_sections, 2)         
-
+         tempo_avg = round(tempo_avg / total_sections, 2) 
+      
       return {
          'sections': total_sections,
          'section_duration_avg': section_duration_avg,
