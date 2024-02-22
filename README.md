@@ -120,8 +120,3 @@ You can view a basic visualization of this ETL in my [personal web page](https:/
 - Learned about CI/CD (Github Actions workflows).
 - Integrated my CI/CD to my AWS resources (Lambda Functions), which was pretty cool and simple. Even though this was a huge leap in my Lambdas knowledge, I want to improve the way I work with Layers. In this project, I manually created my Layers and updated them from the AWS web interface. I'd like to automate this or at least do it from code or CI/CD, just as I do with my Lambdas.
 - Discovered the Step-Functions service, which I found very interesting and powerful. I'd like to dig deeper in how to create and deploy them as code instead of doing it by hand with the web interface (similar to what I did with my Lambdas and my CI/CD).
-
-## Original Idea
-The original idea of this project was to use the song characteristics I mentioned earlier, and by a hand-made dataset of similar songs, train a machine learning model that could decide if two songs sounded similar or not.
-
-This could be done as a side-project in the future, since I'll have a very interesting and diversified dataset as this ETL keeps on running.
