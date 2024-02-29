@@ -35,6 +35,8 @@ def extract():
                     - repeated data (dumping the same data x30 times in the json)
                     - ^ if i'm not gonna repeat data in the json, find a way to count the times i listened
                         to the same thing
+                    - ^ make 'played_at' a list, and append each played_at to the songs dict that i'll
+                        probably use to stop requesting the same thing over and over
             """
             summarized_tracks.append(SummarizedTrack(client, song).get_data())
         except Exception as e:
