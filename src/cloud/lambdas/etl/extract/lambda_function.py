@@ -27,6 +27,15 @@ def extract():
     summarized_tracks = []
     for song in songs_data:
         try:
+            """
+                So many unnecesary requests. Today (29/02/2024) I listened to the same song ~ 30 times (1:30 len)
+                and that means I'll do 30 times the same exactly request? Improve this.
+                Things to improve:
+                    - requests made (main thing)
+                    - repeated data (dumping the same data x30 times in the json)
+                    - ^ if i'm not gonna repeat data in the json, find a way to count the times i listened
+                        to the same thing
+            """
             summarized_tracks.append(SummarizedTrack(client, song).get_data())
         except Exception as e:
             logger.exception(f"song_id: {song}, couldnt be summarized, err: {str(e)}")
