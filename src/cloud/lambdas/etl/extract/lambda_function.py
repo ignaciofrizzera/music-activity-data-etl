@@ -18,8 +18,12 @@ def extract():
     for report in raw_data:
         for _, songs in report.items(): # <Date, List of songs>
             for song in songs:
-                song_key = (song['track_id'], song['played_at'])
-                songs_data[song_key] = song
+                song_id = song['track_id']
+                if song_id not in songs_data:
+                    song['played_at'] = set([song['played_at']])
+                    songs_data[song_id] = song
+                else:
+                    songs_data.get(song_id)['played_at'].add(song['played_at'])
     songs_data = list(songs_data.values())
 
     # Extract data for each song and post it.
@@ -27,17 +31,6 @@ def extract():
     summarized_tracks = []
     for song in songs_data:
         try:
-            """
-                So many unnecesary requests. Today (29/02/2024) I listened to the same song ~ 30 times (1:30 len)
-                and that means I'll do 30 times the same exactly request? Improve this.
-                Things to improve:
-                    - requests made (main thing)
-                    - repeated data (dumping the same data x30 times in the json)
-                    - ^ if i'm not gonna repeat data in the json, find a way to count the times i listened
-                        to the same thing
-                    - ^ make 'played_at' a list, and append each played_at to the songs dict that i'll
-                        probably use to stop requesting the same thing over and over
-            """
             summarized_tracks.append(SummarizedTrack(client, song).get_data())
         except Exception as e:
             logger.exception(f"song_id: {song}, couldnt be summarized, err: {str(e)}")
