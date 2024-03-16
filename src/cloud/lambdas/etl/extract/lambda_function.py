@@ -18,8 +18,12 @@ def extract():
     for report in raw_data:
         for _, songs in report.items(): # <Date, List of songs>
             for song in songs:
-                song_key = (song['track_id'], song['played_at'])
-                songs_data[song_key] = song
+                song_id = song['track_id']
+                if song_id not in songs_data:
+                    song['played_at'] = set([song['played_at']])
+                    songs_data[song_id] = song
+                else:
+                    songs_data.get(song_id)['played_at'].add(song['played_at'])
     songs_data = list(songs_data.values())
 
     # Extract data for each song and post it.
