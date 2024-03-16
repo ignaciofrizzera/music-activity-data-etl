@@ -14,8 +14,8 @@ def load():
         return played_at.split(' ')[0]
     
     def __merge_data_from_same_date(existing_data: pd.DataFrame, new_data: pd.DataFrame) -> pd.DataFrame:
-        existing_data.set_index('track_id', inplace=True, drop=False)
-        new_data.set_index('track_id', inplace=True, drop=False)
+        existing_data.set_index('track_id', inplace=True, drop=True)
+        new_data.set_index('track_id', inplace=True, drop=True)
 
         new_songs = []
         for song_id, curr_song_data in new_data.iterrows():
@@ -25,11 +25,10 @@ def load():
             else:
                 new_songs.append(curr_song_data)
         
-        existing_data.reset_index(inplace=True)
-        
         if new_songs:
-            existing_data = pd.concat([existing_data, pd.DataFrame(new_songs)])
+            existing_data = pd.concat([existing_data, pd.DataFrame(new_songs)], ignore_index=False)
 
+        existing_data.reset_index(inplace=True)
         return existing_data
 
     # Split songs by dates.
