@@ -73,7 +73,7 @@ Since a song can have many sections, instead of representing them in an array of
    "track_id":"7LSpFCvRZZot2AlmkUzy9k",
    "track_name":"SIRENS",
    "track_artist":"Travis Scott",
-   "played_at":"2023-11-28 11:40",
+   "played_at":["2023-11-28 11:40", "2023-11-28 16:30"],
    "explicit":true,
    "popularity":77,
    "album":"UTOPIA",
