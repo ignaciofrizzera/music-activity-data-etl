@@ -30,6 +30,7 @@ def extract():
     client = SpotipyClient().general_data_client()
     summarized_tracks = []
     for song in songs_data:
+        song['played_at'] = list(song['played_at'])
         try:
             summarized_tracks.append(SummarizedTrack(client, song).get_data())
         except Exception as e:
