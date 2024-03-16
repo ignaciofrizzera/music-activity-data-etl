@@ -28,7 +28,7 @@ def load():
         if new_songs:
             existing_data = pd.concat([existing_data, pd.DataFrame(new_songs)], ignore_index=False)
 
-        existing_data.reset_index(inplace=True)
+        existing_data.reset_index(inplace=True, names=['track_id'])
         return existing_data
 
     # Split songs by dates.
