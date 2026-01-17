@@ -19,9 +19,7 @@ So my project architecture looks like this:
 ![Architecture](static/images/architecture.png "Architecture")
 
 ## Data being tracked
-The data being tracked can be divided into two main groups. The song general data and the sections data.
-
-> ****: many of this data was pruned due to endpoints being removed from Spotify's API.
+> Note: many of this data was pruned due to endpoints being removed from Spotify's API.
 
 ### Song General Data
 This data represents general information about a song. Here are the features used here:
