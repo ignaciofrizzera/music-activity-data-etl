@@ -1,18 +1,19 @@
+import pandas as pd
+
 from s3.RawFileRepository import RawFileRepository
 from s3.CleanFileRepository import CleanFileRepository
 from s3.FileType import FileType
-import pandas as pd
 
 
 def load():
     raw_file_repository = RawFileRepository()
     data = raw_file_repository.get(FileType.STRUCTURED)
     clean_file_repository = CleanFileRepository()
-    
+
     def __get_date_from_played_at(played_at: str) -> str:
         # "played_at": "2023-11-02 23:16"
         return played_at.split(' ')[0]
-    
+
     def __merge_data_from_same_date(existing_data: pd.DataFrame, new_data: pd.DataFrame) -> pd.DataFrame:
         existing_data.set_index('track_id', inplace=True, drop=True)
         new_data.set_index('track_id', inplace=True, drop=True)
@@ -24,7 +25,7 @@ def load():
                 existing_data.at[song_id, 'played_at'] = updated_played_at
             else:
                 new_songs.append(curr_song_data)
-        
+
         if new_songs:
             existing_data = pd.concat([existing_data, pd.DataFrame(new_songs)], ignore_index=False)
 
@@ -40,24 +41,26 @@ def load():
         for played_at in song['played_at']:
             played_at_date = __get_date_from_played_at(played_at)
             song_dates.setdefault(played_at_date, []).append(played_at)
+
         # add the song with it's played_ats to the corresponding date
         for song_date, played_at_for_date in song_dates.items():
             song_for_date = song.copy()
             song_for_date['played_at'] = played_at_for_date
             songs_by_date.setdefault(song_date, []).append(song_for_date)
-    
+
     for date_key, songs_from_date in songs_by_date.items():
         existing_data = clean_file_repository.get(date_key)
         new_data = pd.DataFrame(songs_from_date)
-        
+
         if not existing_data.empty:
             new_data = __merge_data_from_same_date(existing_data, new_data)
-        
+
         clean_file_repository.post(date_key, new_data.to_json(orient='records'))
-    
+
     # Once we generate our daily cleaned data, we proceed to delete all the intermediate files:
     # hourly reports, unstructured_report, structured_report.
     raw_file_repository.delete()
+
 
 def lambda_handler(event, context):
     load()
