@@ -20,6 +20,9 @@ So my project architecture looks like this:
 
 ## Data being tracked
 The data being tracked can be divided into two main groups. The song general data and the sections data.
+
+> ****: many of this data was pruned due to endpoints being removed from Spotify's API.
+
 ### Song General Data
 This data represents general information about a song. Here are the features used here:
 - **track_id**: ID of the track from Spotify's API.
@@ -33,38 +36,6 @@ This data represents general information about a song. Here are the features use
 -  **album_cover_height**: Cover's height.
 -  **album_cover_width**: Cover's width.
 -  **duration**: Duration of the track in seconds.
-
-The following data comes from the [Track's Audio Features](https://developer.spotify.com/documentation/web-api/reference/get-several-audio-features) endpoint, for more detail on each attribute, view the endpoint's documentation.
-
--  **loudness**: Overall loudness of the track in decibels.
--  **tempo**: Overall tempo of the track in beats per minute.
--  **key**: The key the track is in.
--  **time_signature**: Estimated time signature.
--  **mode**: The mode indicates the modality of the track (major or minor).
--  **acousticness**: Confidence value of wether the track is acoustic.
--  **danceability**: Describes how suitable the track is for dancing.
--  **energy**: Represents a perceptual measure of intensity and activity.
--  **instrumentalness**: Predicts whether a track contains no vocals.
--  **speechiness**: Detects the presence of spoken words in the track.
--  **valence**: Describes the musical positiveness conveyed by the track.
-
-This features are calculated.
-- **sections**: The number of sections the track is divided in.
-- **sections_duration_avg**: The average duration of each section of the track.
-- **loudness_avg**: The average loudness of the sections in the track.
-- **tempo_avg**: The average tempo of the sections in the track.
-
-### Sections data
-According to Spotify: *Sections are defined by large variations in rhythm or timbre, e.g. chorus, verse, bridge, guitar solo, etc. Each section contains its own descriptions of tempo, key, mode, time_signature, and loudness.* This data is obtained from the [Track's Audio Analysis](https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis) endpoint.
-
-Since a song can have many sections, instead of representing them in an array of objects (like Spotify's API), they're represented in sequences of values.
-
-- **start_sequence**: Contains the seconds at where each section starts.
-- **loudness_sequence**: Contains the loudness of each section.
-- **tempo_sequence**: Contains the tempo of each section.
-- **key_sequence**: Contains the key of each section.
-- **mode_sequence**: Contains the mode of seach section.
-- **time_signature_sequence**: Contains the time signature of each section.
 
 ### Here's how the data for a single song looks at the end of the ETL
 
@@ -80,28 +51,7 @@ Since a song can have many sections, instead of representing them in an array of
    "album_cover":"https:\/\/i.scdn.co\/image\/ab67616d0000b273881d8d8378cd01099babcd44",
    "album_cover_height":640,
    "album_cover_width":640,
-   "duration":204.4473,
-   "loudness":-6.117,
-   "tempo":96.003,
-   "key":9,
-   "time_signature":3,
-   "mode":0,
-   "acousticness":0.0976,
-   "danceability":0.588,
-   "energy":0.88,
-   "instrumentalness":0.000167,
-   "speechiness":0.0747,
-   "valence":0.242,
-   "sections":9,
-   "section_duration_avg":22.72,
-   "loudness_avg":-7.21,
-   "tempo_avg":95.66,
-   "start_sequence":[0.0,25.8771,61.58935,78.49172,94.13155,142.6858,153.51543,169.3769,185.09818],
-   "loudness_sequence":[-16.568,-6.653,-5.532,-5.096,-5.193,-4.658,-2.569,-7.718,-10.89],
-   "tempo_sequence":[96.819,96.11,95.934,95.919,96.05,93.908,94.623,96.033,95.551],
-   "key_sequence":[9,9,0,8,9,9,9,2,7],
-   "mode_sequence":[0,0,1,1,0,0,0,1,0],
-   "time_signature_sequence":[3,3,3,3,3,3,3,3,3]
+   "duration":204.4473
 }
 ```
 ## Data that could be added
