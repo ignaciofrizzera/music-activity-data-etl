@@ -1,0 +1,12 @@
+[project]
+name = "music-activity-data-etl"
+version = "0.1.0"
+description = "Basic music activity data ETL using AWS resources and Spotipy"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.42.30",
+    "botocore>=1.42.30",
+    "pandas>=2.3.3",
+    "spotipy>=2.25.2",
+]
